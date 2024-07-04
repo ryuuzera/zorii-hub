@@ -1,6 +1,8 @@
+import { ClientTab } from '@/components/client-tab';
 import GameList from '@/components/gameList';
 import HardwareMonitor from '@/components/hardwaremonitor';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Startup } from '@/components/startup';
+import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 async function getGames() {
   try {
@@ -31,7 +33,8 @@ export default async function Home() {
 
   return (
     <main className='flex w-screen items-center justify-center'>
-      <Tabs defaultValue='Hardware'>
+      <Startup />
+      <ClientTab defaultValue='Hardware'>
         <div className='flex flex-row gap-2 item-center justify-center w-full mt-2'>
           <TabsList className='grid w-[500px] grid-cols-3'>
             <TabsTrigger value='Games'>Steam Games</TabsTrigger>
@@ -47,7 +50,10 @@ export default async function Home() {
         <TabsContent value='Hardware' className='w-screen flex items-center justify-center'>
           <HardwareMonitor data={hardwareInfo} />
         </TabsContent>
-      </Tabs>
+        <TabsContent value='Settings'>
+          <button>Desligar</button>
+        </TabsContent>
+      </ClientTab>
     </main>
   );
 }

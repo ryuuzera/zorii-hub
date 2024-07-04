@@ -51,7 +51,7 @@ export default function GameList({ games }: any) {
           onClick={() => {
             socket.timeout(5000).emit('rungame', { appid: item.appid });
           }}>
-          <Image width={300} height={450} quality={50} alt={item.name} src={item.validSrc} />
+          <Image width={300} height={450} quality={90} alt={item.name} src={item.validSrc} />
         </div>
       ))}
     </>

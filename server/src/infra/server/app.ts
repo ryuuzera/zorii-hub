@@ -33,10 +33,13 @@ io.on('connection', (socket) => {
     // runSteamGame(data.appid);
   });
 
+  socket.on('shutdown', () => {
+    console.log('shutdown requested');
+  })
+
   setInterval(async () => {
-    const hardwareInfo = await getCompleteHardwareInfo();
-    socket.emit('hardware-info', hardwareInfo);
-  }, 2000);
+    getCompleteHardwareInfo().then((hardwareInfo) => socket.emit('hardware-info', hardwareInfo));
+  }, 500);
 
   socket.on('disconnect', () => {
     console.log(`User disconnected with id ${socket.id}`);

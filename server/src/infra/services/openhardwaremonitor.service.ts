@@ -35,7 +35,8 @@ export async function getCompleteHardwareInfo() {
     max: cpu.Max,
     value: cpu.Value,
   };
-  const cpuName = os.cpus().find(() => true)?.model;
+
+  const cpuName = os.cpus()[0]?.model || 'Unknown CPU';
   const cpuClocks = cpu.Children?.find((x) => x.Text.includes('Clock')).Children;
   const cpuTemps = cpu.Children?.find((x) => x.Text.includes('Temperature')).Children;
   const cpuLoad = cpu.Children?.find((x) => x.Text.includes('Load')).Children;
