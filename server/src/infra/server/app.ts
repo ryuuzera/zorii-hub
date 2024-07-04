@@ -4,6 +4,7 @@ import http from 'http';
 import path from 'path';
 import { Server } from 'socket.io';
 import routes from '../../config/routes';
+import { getCompleteHardwareInfo } from '../services/openhardwaremonitor.service';
 
 require('dotenv').config();
 const app = express();
@@ -30,6 +31,15 @@ io.on('connection', (socket) => {
 
   socket.on('rungame', (data) => {
     // runSteamGame(data.appid);
+  });
+
+  setInterval(async () => {
+    const hardwareInfo = await getCompleteHardwareInfo();
+    socket.emit('hardware-info', hardwareInfo);
+  }, 2000);
+
+  socket.on('disconnect', () => {
+    console.log(`User disconnected with id ${socket.id}`);
   });
 });
 

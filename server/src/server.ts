@@ -14,4 +14,3 @@ const logColorEnv = (env: string) => {
 
 httpServer.listen(process.env.PORT, () => console.log(`Server running on Port ${process.env.PORT}`));
 
-// httpServer.listen(process.env.WEBSOCKET_PORT, () => console.log('Websocket running on port ' + process.env.WEBSOCKET_PORT));

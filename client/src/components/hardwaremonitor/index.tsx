@@ -1,32 +1,23 @@
 'use client';
+import { socket } from '@/socket';
 import { convertBytes } from '@/utils/converter/byteconverter';
+import { Typography } from '@mui/material';
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import { useEffect, useState } from 'react';
 import { MonitorCard } from './monitorcard';
 
 export default function HardwareMonitor({ data }: any) {
-  async function updateData() {
-    try {
-      const result = await fetch('http://192.168.0.109:3001/api/hardwareinfo', { cache: 'no-cache' });
-      if (result.ok) {
-        return await result.json();
-      }
-      return null;
-    } catch {
-      return null;
-    }
-  }
   const [localData, setData] = useState(data);
-  let refresh: NodeJS.Timeout;
+
   useEffect(() => {
-    refresh = setInterval(() => {
-      updateData()
-        .then((data) => setData(data))
-        .catch(() => {});
-    }, 2000);
+    socket.connect();
+    socket.on('hardware-info', (data) => {
+      setData(data);
+    });
 
     return () => {
-      clearInterval(refresh);
+      socket.removeAllListeners();
+      socket.disconnect();
     };
   }, []);
 
@@ -35,7 +26,7 @@ export default function HardwareMonitor({ data }: any) {
   return (
     <>
       <div className='w-full max-w-7xl flex flex-row flex-wrap items-center justify-evenly'>
-        <MonitorCard
+        {/* <MonitorCard
           title={
             <div className='flex flex-col w-full gap-2 text-start'>
               <img src='/display.png' className='self-center' alt='display' width={50} />
@@ -54,19 +45,22 @@ export default function HardwareMonitor({ data }: any) {
               <p>OS: {localData.system}</p>
             </div>
           }
-        />
-        <div className='border-2 border-white'>
+        /> */}
+        <div className='flex flex-col items-center'>
+          <Typography variant='body1'>CPU Load</Typography>
           <Gauge
             width={180}
             height={200}
             value={parseFloat(cpuLoad)}
             innerRadius={55}
             sx={(theme) => ({
+              margin: 0,
               [`& .${gaugeClasses.valueText}`]: {
                 fontSize: '2rem',
               },
               [`& .${gaugeClasses.valueArc}`]: {
                 fill: '#4752c4',
+                transition: 'all 0.2s',
               },
               [`& .${gaugeClasses.referenceArc}`]: {
                 fill: '#9da0a5',
@@ -75,7 +69,8 @@ export default function HardwareMonitor({ data }: any) {
             text={({ value, valueMax }) => `${value}%`}
           />
         </div>
-        <div className='border-2 border-white'>
+        <div className='flex flex-col items-center'>
+          <Typography variant='body1'>CPU Temp</Typography>
           <Gauge
             width={180}
             height={200}
@@ -88,6 +83,7 @@ export default function HardwareMonitor({ data }: any) {
               },
               [`& .${gaugeClasses.valueArc}`]: {
                 fill: '#4752c4',
+                transition: 'all 0.2s',
                 // filter: 'brightness(50%)',
               },
               [`& .${gaugeClasses.referenceArc}`]: {
