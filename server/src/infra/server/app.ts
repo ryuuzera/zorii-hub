@@ -4,7 +4,6 @@ import http from 'http';
 import path from 'path';
 import { Server } from 'socket.io';
 import routes from '../../config/routes';
-import { runSteamGame } from '../services/steam.services';
 
 require('dotenv').config();
 const app = express();
@@ -30,8 +29,7 @@ io.on('connection', (socket) => {
   console.log(`user conected on id ${socket.id}`);
 
   socket.on('rungame', (data) => {
-    console.log(`running game ${data.appid}`);
-    runSteamGame(data.appid);
+    // runSteamGame(data.appid);
   });
 });
 

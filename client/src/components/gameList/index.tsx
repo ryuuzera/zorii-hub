@@ -2,7 +2,6 @@
 import { socket } from '@/socket';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
 export default function GameList({ games }: any) {
   const [validGames, setValidGames] = useState<any[]>([]);
 
@@ -37,7 +36,7 @@ export default function GameList({ games }: any) {
     checkImages();
 
     socket.connect();
-
+    (async () => await navigator.wakeLock?.request('screen'))();
     return () => {
       socket.removeAllListeners();
       socket.disconnect();
@@ -45,16 +44,14 @@ export default function GameList({ games }: any) {
   }, []);
   return (
     <>
-      {validGames.map((item) => (
-        <div key={item.appid} className='flex flex-col'>
-          <div
-            className='h-[225px] w-[150px] m-2 overflow-auto'
-            onClick={() => {
-              console.log('teste');
-              socket.timeout(5000).emit('rungame', { appid: item.appid });
-            }}>
-            <Image width={150} height={225} alt={item.name} src={item.validSrc} />
-          </div>
+      {validGames?.map((item) => (
+        <div
+          key={item.appid}
+          className='flex flex-col h-[230px] w-[155px] p-[3px] hover:p-0 transition-all delay-100'
+          onClick={() => {
+            socket.timeout(5000).emit('rungame', { appid: item.appid });
+          }}>
+          <Image width={300} height={450} quality={50} alt={item.name} src={item.validSrc} />
         </div>
       ))}
     </>
