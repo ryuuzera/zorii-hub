@@ -1,6 +1,6 @@
 import { exec } from 'child_process';
 
-export function runShutdown(appid) {
+export function runShutdown() {
   const command = `start shutdown -s -t 0`;
   console.log(command);
 

@@ -17,8 +17,8 @@ export function CpuInfo({ cpuInfo }: any) {
   }, [cpuInfo.cpuLoad]);
 
   return (
-    <div className='flex flex-col items-center min-h-[320px] mt-1'>
-      <Typography variant='h5'>CPU</Typography>
+    <div className='flex flex-col items-center min-h-[320px]'>
+      <Typography variant='h6' mb={1}>{cpuInfo.name} </Typography>
       <div className='flex flex-row space-x-3'>
         <div className='flex flex-col items-center'>
           <Typography variant='body1'>Load</Typography>
@@ -72,7 +72,7 @@ export function CpuInfo({ cpuInfo }: any) {
       <div className='flex flex-col items-center w-full transition-all delay-150'>
         <SparkLineChart
           data={loadLog}
-          height={70}
+          height={50}
           curve='linear'
           yAxis={{
             min: 0,

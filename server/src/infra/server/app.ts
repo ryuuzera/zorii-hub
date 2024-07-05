@@ -5,6 +5,7 @@ import path from 'path';
 import { Server } from 'socket.io';
 import routes from '../../config/routes';
 import { getCompleteHardwareInfo } from '../services/openhardwaremonitor.service';
+import { runShutdown } from '../services/win.services';
 
 require('dotenv').config();
 const app = express();
@@ -34,8 +35,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('shutdown', () => {
-    console.log('shutdown requested');
-  })
+    // runShutdown();
+    console.log('shutdown')
+  });
 
   setInterval(async () => {
     getCompleteHardwareInfo().then((hardwareInfo) => socket.emit('hardware-info', hardwareInfo));

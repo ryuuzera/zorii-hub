@@ -1,6 +1,7 @@
 import { ClientTab } from '@/components/client-tab';
 import GameList from '@/components/gameList';
 import HardwareMonitor from '@/components/hardwaremonitor';
+import { Shutdown } from '@/components/shutdown';
 import { Startup } from '@/components/startup';
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -51,7 +52,7 @@ export default async function Home() {
           <HardwareMonitor data={hardwareInfo} />
         </TabsContent>
         <TabsContent value='Settings'>
-          <button>Desligar</button>
+          <Shutdown />
         </TabsContent>
       </ClientTab>
     </main>
