@@ -4,24 +4,16 @@ import HardwareMonitor from '@/components/hardwaremonitor';
 import { Shutdown } from '@/components/shutdown';
 import { Startup } from '@/components/startup';
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { HardwareInfo } from '@/types/response-schemas/hardwareinfo';
+import { SteamGame } from '@/types/response-schemas/steam';
 
-async function getGames() {
-  try {
-    const result = await fetch('http://192.168.0.109:3001/api/steam', { cache: 'no-cache' });
-    if (result.ok) {
-      return await result.json();
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
-}
+type dataType = 'steam' | 'hardwareinfo';
 
-async function getHardwareInfo() {
+async function fetchData<T>(type: dataType) {
   try {
-    const result = await fetch('http://192.168.0.109:3001/api/hardwareinfo', { cache: 'no-cache' });
+    const result = await fetch(`http://192.168.0.109:3001/api/${type}`, { cache: 'no-cache' });
     if (result.ok) {
-      return await result.json();
+      return (await result.json()) as T;
     }
     return null;
   } catch {
@@ -30,7 +22,7 @@ async function getHardwareInfo() {
 }
 
 export default async function Home() {
-  const [games, hardwareInfo] = await Promise.all([getGames(), getHardwareInfo()]);
+  const [games, hardwareInfo] = await Promise.all([fetchData<SteamGame[]>('steam'), fetchData<HardwareInfo>('hardwareinfo')]);
 
   return (
     <main className='flex w-screen items-center justify-center'>

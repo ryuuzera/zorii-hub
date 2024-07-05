@@ -8,9 +8,6 @@ export function MonitorCard({ title, description, cardContent, className, conten
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className={contentClass}>{cardContent}</CardContent>
-      {/* <CardFooter>
-      <p>Card Footer</p>
-    </CardFooter> */}
     </Card>
   );
 }

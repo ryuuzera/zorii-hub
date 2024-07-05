@@ -1,5 +1,6 @@
 'use client';
 import { socket } from '@/socket';
+import { HardwareInfo, HwData } from '@/types/response-schemas/hardwareinfo';
 import { convertBytes } from '@/utils/converter/byteconverter';
 import { Box, LinearProgress, Typography } from '@mui/material';
 import { Gauge, gaugeClasses } from '@mui/x-charts';
@@ -7,15 +8,18 @@ import { useEffect, useState } from 'react';
 import { CpuInfo } from './cpuInfo';
 import { MonitorCard } from './monitorcard';
 
-export default function HardwareMonitor({ data }: any) {
-  const [localData, setData] = useState(data);
+type HardwareMonitorProps = {
+  data: HardwareInfo | null;
+};
+
+export default function HardwareMonitor({ data }: HardwareMonitorProps) {
+  const [localData, setData] = useState<HardwareInfo | null>(data);
 
   useEffect(() => {
     socket.connect();
     socket.on('hardware-info', (data) => {
       setData(data);
     });
-    console.log(localData);
     return () => {
       socket.removeAllListeners();
       socket.disconnect();
@@ -23,63 +27,71 @@ export default function HardwareMonitor({ data }: any) {
   }, []);
 
   const cpuInfo = {
-    name: localData.cpu.cpuName,
-    cpuTemp: parseFloat(localData.cpu.cpuTemps.find((x: any) => x.Text.includes('Package'))?.Value ?? 0),
-    cpuLoad: parseFloat(localData.cpu.cpuLoad.find((x: any) => x.Text.includes('Total'))?.Value ?? 0),
-    clocks: localData.cpu.cpuClocks
-      .filter((x) => !x.Text.includes('Bus'))
-      .map((item) => ({ min: item.Min, value: item.Value, max: item.Max })),
-    temps: localData.cpu.cpuTemps
-      .filter((x) => !x.Text.includes('Package'))
-      .map((item) => ({ min: item.Min, value: item.Value, max: item.Max })),
-    loads: localData.cpu.cpuLoad
-      .filter((x) => !x.Text.includes('Total'))
-      .map((item) => ({ min: item.Min, value: item.Value, max: item.Max })),
+    name: localData?.cpu.cpuName,
+    cpuTemp: parseFloat(localData?.cpu.cpuTemps.find((item: HwData) => item.Text.includes('Package'))?.Value ?? ''),
+    cpuLoad: parseFloat(localData?.cpu.cpuLoad.find((item: HwData) => item.Text.includes('Total'))?.Value ?? ''),
+    clocks: localData?.cpu.cpuClocks
+      .filter((item: HwData) => !item.Text.includes('Bus'))
+      .map((item: HwData) => ({ min: item.Min, value: item.Value, max: item.Max })),
+    temps: localData?.cpu.cpuTemps
+      .filter((item: HwData) => !item.Text.includes('Package'))
+      .map((item: HwData) => ({ min: item.Min, value: item.Value, max: item.Max })),
+    loads: localData?.cpu.cpuLoad
+      .filter((item: HwData) => !item.Text.includes('Total'))
+      .map((item: HwData) => ({ min: item.Min, value: item.Value, max: item.Max })),
   };
 
-  const gpuTemp = localData.gpu.gpuTemps.find((x: any) => x.Text.includes('Core'))?.Value;
-  const gpuLoad = localData.gpu.gpuLoad.find((x: any) => x.Text.includes('Core'))?.Value;
+  const gpuTemp = localData?.gpu.gpuTemps.find((item: HwData) => item.Text.includes('Core'))?.Value;
+  const gpuLoad = localData?.gpu.gpuLoad.find((item: HwData) => item.Text.includes('Core'))?.Value;
   const gpuMem = {
-    total: localData.gpu.gpuData.find((x: any) => x.Text.includes('Total'))?.Value,
-    used: localData.gpu.gpuData.find((x: any) => x.Text.includes('Used'))?.Value,
-    free: localData.gpu.gpuData.find((x: any) => x.Text.includes('Free'))?.Value,
+    total: localData?.gpu.gpuData.find((item: HwData) => item.Text.includes('Total'))?.Value,
+    used: localData?.gpu.gpuData.find((item: HwData) => item.Text.includes('Used'))?.Value,
+    free: localData?.gpu.gpuData.find((item: HwData) => item.Text.includes('Free'))?.Value,
   };
 
   const memory = {
-    name: localData.memory.memoryName,
-    total: localData.memory.memoryTotal,
+    name: localData?.memory.memoryName,
+    total: localData?.memory.memoryTotal,
     load: {
-      min: parseFloat(localData.memory.memoryLoad[0]?.Min),
-      value: parseFloat(localData.memory.memoryLoad[0]?.Value),
-      max: parseFloat(localData.memory.memoryLoad[0]?.Max),
+      min: parseFloat(localData?.memory.memoryLoad[0]?.Min ?? ''),
+      value: parseFloat(localData?.memory.memoryLoad[0]?.Value ?? ''),
+      max: parseFloat(localData?.memory.memoryLoad[0]?.Max ?? ''),
     },
     used: {
-      min: parseFloat(localData.memory.memoryData.find((x) => x.Text.includes('Used'))?.Min).toFixed(1),
-      value: localData.memory.memoryData.find((x) => x.Text.includes('Used'))?.Value,
-      max: parseFloat(localData.memory.memoryData.find((x) => x.Text.includes('Used'))?.Max).toFixed(1),
+      min: parseFloat(
+        localData?.memory.memoryData.find((item: HwData) => item.Text.includes('Used'))?.Min ?? ''
+      ).toFixed(1),
+      value: localData?.memory.memoryData.find((item: HwData) => item.Text.includes('Used'))?.Value,
+      max: parseFloat(
+        localData?.memory.memoryData.find((item: HwData) => item.Text.includes('Used'))?.Max ?? ''
+      ).toFixed(1),
     },
     free: {
-      min: parseFloat(localData.memory.memoryData.find((x) => x.Text.includes('Available'))?.Min).toFixed(1),
-      value: localData.memory.memoryData.find((x) => x.Text.includes('Available'))?.Value,
-      max: parseFloat(localData.memory.memoryData.find((x) => x.Text.includes('Available'))?.Max).toFixed(1),
+      min: parseFloat(
+        localData?.memory.memoryData.find((item: HwData) => item.Text.includes('Available'))?.Min ?? ''
+      ).toFixed(1),
+      value: localData?.memory.memoryData.find((item: HwData) => item.Text.includes('Available'))?.Value,
+      max: parseFloat(
+        localData?.memory.memoryData.find((item: HwData) => item.Text.includes('Available'))?.Max ?? ''
+      ).toFixed(1),
     },
   };
 
-  const storage = Object.keys(localData.storage).map((key) => {
+  const storage = Object.keys(localData?.storage!)?.map((key: string) => {
     return {
-      name: localData.storage[key].name,
+      name: localData?.storage[key].name,
       temperatures: {
-        min: localData.storage[key].temperatures?.find((x) => x.Text.includes('Temperature'))?.Min,
-        value: localData.storage[key].temperatures?.find((x) => x.Text.includes('Temperature'))?.Value,
-        max: localData.storage[key].temperatures?.find((x) => x.Text.includes('Temperature'))?.Max,
+        min: localData?.storage[key].temperatures?.find((item: HwData) => item.Text.includes('Temperature'))?.Min,
+        value: localData?.storage[key].temperatures?.find((item: HwData) => item.Text.includes('Temperature'))?.Value,
+        max: localData?.storage[key].temperatures?.find((item: HwData) => item.Text.includes('Temperature'))?.Max,
       },
       usedSpace: {
-        min: localData.storage[key].load?.find((x) => x.Text.includes('Used'))?.Min,
-        value: localData.storage[key].load?.find((x) => x.Text.includes('Used'))?.Value,
-        max: localData.storage[key].load?.find((x) => x.Text.includes('Used'))?.Max,
+        min: localData?.storage[key].load?.find((item: HwData) => item.Text.includes('Used'))?.Min,
+        value: localData?.storage[key].load?.find((item: HwData) => item.Text.includes('Used'))?.Value,
+        max: localData?.storage[key].load?.find((item: HwData) => item.Text.includes('Used'))?.Max,
       },
-      remainingLife: localData.storage[key].levels?.find((x) => x.Text.includes('Life'))?.Value,
-      total: localData.storage[key].data?.find((x) => x.Text.includes('Reads'))?.Value,
+      remainingLife: localData?.storage[key].levels?.find((item: HwData) => item.Text.includes('Life'))?.Value,
+      total: localData?.storage[key].data?.find((item: HwData) => item.Text.includes('Reads'))?.Value,
     };
   });
 
@@ -88,7 +100,9 @@ export default function HardwareMonitor({ data }: any) {
       <div className='w-full max-w-7xl flex flex-row flex-wrap items-center justify-evenly'>
         <CpuInfo cpuInfo={cpuInfo} />
         <div className='flex flex-col items-center min-h-[320px] mt-1'>
-          <Typography variant='h6' mb={1}>{localData.gpu.gpuName}</Typography>
+          <Typography variant='h6' mb={1}>
+            {localData.gpu.gpuName}
+          </Typography>
           <div className='flex flex-row space-x-3'>
             <div className='flex flex-col items-center'>
               <Typography variant='body1'>Load</Typography>

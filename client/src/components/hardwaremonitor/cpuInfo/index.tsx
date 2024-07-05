@@ -35,7 +35,6 @@ export function CpuInfo({ cpuInfo }: any) {
               [`& .${gaugeClasses.valueArc}`]: {
                 fill: '#1cbab7',
                 transition: 'all 0.2s',
-                // filter: 'brightness(50%)',
               },
               [`& .${gaugeClasses.referenceArc}`]: {
                 fill: '#424750',
@@ -59,7 +58,6 @@ export function CpuInfo({ cpuInfo }: any) {
               [`& .${gaugeClasses.valueArc}`]: {
                 fill: '#1cbab7',
                 transition: 'all 0.2s',
-                // filter: 'brightness(50%)',
               },
               [`& .${gaugeClasses.referenceArc}`]: {
                 fill: '#424750',
