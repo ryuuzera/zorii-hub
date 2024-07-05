@@ -101,7 +101,7 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
         <CpuInfo cpuInfo={cpuInfo} />
         <div className='flex flex-col items-center min-h-[320px] mt-1'>
           <Typography variant='h6' mb={1}>
-            {localData.gpu.gpuName}
+            {localData?.gpu.gpuName}
           </Typography>
           <div className='flex flex-row space-x-3'>
             <div className='flex flex-col items-center'>
@@ -109,7 +109,7 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
               <Gauge
                 width={180}
                 height={200}
-                value={parseFloat(gpuLoad)}
+                value={parseFloat(gpuLoad ?? '')}
                 innerRadius={55}
                 sx={(theme) => ({
                   margin: 0,
@@ -132,7 +132,7 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
               <Gauge
                 width={180}
                 height={200}
-                value={parseFloat(gpuTemp)}
+                value={parseFloat(gpuTemp ?? '')}
                 innerRadius={55}
                 sx={(theme) => ({
                   [`& .${gaugeClasses.valueText}`]: {
@@ -180,23 +180,23 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
             <Typography variant='body1'>Usage {memory.load.value}%</Typography>
             <Typography variant='body1'>Used RAM: {memory.used.value}</Typography>
             <Typography variant='body1'>Available: {memory.free.value}</Typography>
-            <Typography variant='body1'>Total {convertBytes(memory.total, 'B', 'GB').toFixed(1)} GB</Typography>
+            <Typography variant='body1'>Total {convertBytes(memory.total ?? 0, 'B', 'GB').toFixed(1)} GB</Typography>
           </div>
         </div>
         <div className='overflow-x-scroll items-center justify-evenly min-w-[380px] h-[310px] mt-1 gap-3'>
           <div className='flex flex-col h-full w-full'>
             <div className='flex flex-col w-full items-center'>
-              <Typography variant='h5'>CPU Cores ({cpuInfo.loads.length})</Typography>
+              <Typography variant='h5'>CPU Cores ({cpuInfo?.loads?.length})</Typography>
             </div>
 
-            {cpuInfo.loads.map((item, index) => {
+            {cpuInfo?.loads?.map((item, index) => {
               return (
                 <div className='flex flex-col gap-1 items-left text-left w-full'>
                   <span>Core #{index + 1}</span>
                   <div className='flex flex-row gap-1 w-full'>
                     <span>{item.value}</span>
-                    <span>{cpuInfo.clocks[index]?.value}</span>
-                    <span>{cpuInfo.temps[index]?.value}</span>
+                    <span>{cpuInfo?.clocks && cpuInfo?.clocks[index].value}</span>
+                    <span>{cpuInfo?.temps && cpuInfo?.temps[index].value}</span>
                   </div>
                 </div>
               );
@@ -227,19 +227,19 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
           title={
             <div className='flex flex-col w-full gap-2 text-start'>
               <img src='/display.png' className='self-end' alt='display' width={40} />
-              <p>{localData.pcName}</p>
+              <p>{localData?.pcName}</p>
             </div>
           }
-          description={localData.username}
+          description={localData?.username}
           className='w-[400px] h-[280px] flex flex-col justify-start border-none'
           contentClass='pl-3 pt-0 pb-2 '
           headerClass='pt-3 pl-3 pb-1 mb-2'
           cardContent={
             <div className='flex flex-col gap-2'>
-              <p>CPU: {localData.cpu.cpuName}</p>
-              <p>GPU: {localData.gpu.gpuName}</p>
-              <p>Memory: {`${convertBytes(localData.memory.memoryTotal, 'B', 'GB').toFixed(2)} GB`}</p>
-              <p>OS: {localData.system}</p>
+              <p>CPU: {localData?.cpu.cpuName}</p>
+              <p>GPU: {localData?.gpu.gpuName}</p>
+              <p>Memory: {`${convertBytes(localData?.memory.memoryTotal ?? 0, 'B', 'GB').toFixed(2)} GB`}</p>
+              <p>OS: {localData?.system}</p>
             </div>
           }
         />
