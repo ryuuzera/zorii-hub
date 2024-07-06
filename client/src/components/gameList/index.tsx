@@ -1,6 +1,9 @@
 'use client';
+import { useCurrentGame } from '@/hook/current-game';
+import { useGameInfo } from '@/hook/game-info';
 import { socket } from '@/socket';
 import { SteamGame } from '@/types/response-schemas/steam';
+import { SteamGameInfo } from '@/types/response-schemas/steam-game-info';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -19,7 +22,25 @@ const isImageUrlValid = async (url: string) => {
 
 export default function GameList({ games }: GameListProps) {
   const [validGames, setValidGames] = useState<SteamGame[]>([]);
+  const { setCurrentGame, setOpenDrawer } = useCurrentGame();
+  const { setGameInfo } = useGameInfo();
 
+  const fetchGameData = async (game: SteamGame) => {
+    const result = await fetch('http://192.168.0.109:3001/api/steam/gameinfo?appId=' + game?.appid + '&language=en');
+    if (result.ok) {
+      const res = await result.json();
+      setGameInfo(res[game?.appid as string]['data'] as SteamGameInfo);
+    }
+    return result.ok;
+  };
+
+  const handleGameSelect = async (item: SteamGame) => {
+    socket.emit('rungame', item);
+    setCurrentGame(item);
+    if (await fetchGameData(item)) {
+      setOpenDrawer(true);
+    }
+  };
   useEffect(() => {
     if (!games) return;
 
@@ -56,10 +77,8 @@ export default function GameList({ games }: GameListProps) {
         .map((item: SteamGame) => (
           <div
             key={item.appid}
-            className='flex flex-col h-[230px] w-[155px] p-[3px] hover:p-0 transition-all delay-100'
-            onClick={() => {
-              socket.timeout(5000).emit('rungame', item);
-            }}>
+            className='flex flex-col h-[230px] w-[155px] p-[3px] hover:p-0 transition-all delay-100 shadow-lg shadow-indigo-500/10 border-none'
+            onClick={() => handleGameSelect(item)}>
             <Image width={300} height={450} quality={90} alt={item.name} src={item.images.portrait} />
           </div>
         ))}

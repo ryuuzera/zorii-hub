@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
   console.log(`user conected on id ${socket.id}`);
 
   socket.on('rungame', (data) => {
-    runSteamGame(data);
+    runSteamGame(data).then((res) => socket.emit('recentupdate', res));
   });
 
   socket.on('shutdown', () => {

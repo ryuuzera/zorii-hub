@@ -107,29 +107,32 @@ export function listInstalledGames() {
 
 export async function runSteamGame(game) {
   const recentGame = new RecentGameRepository();
-  console.log(game);
   try {
-    const result = await recentGame.create({
+    await recentGame.create({
       appId: game.appid,
       title: game.name,
     });
+
+    const result = recentGame.list();
+    const command = `start steam://run/${game.appid}`;
+
+    // exec(command, (error, stdout, stderr) => {
+    //   if (error) {
+    //     console.error(`Error executing command: ${error.message}`);
+    //     return;
+    //   }
+
+    //   if (stderr) {
+    //     console.error(`stderr: ${stderr}`);
+    //     return;
+    //   }
+
+    //   console.log(`stdout: ${stdout}`);
+    // });
+
+    return result;
   } catch (error: any) {
     console.log(error.message);
     return;
   }
-  const command = `start steam://run/${game.appid}`;
-
-  // exec(command, (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.error(`Error executing command: ${error.message}`);
-  //     return;
-  //   }
-
-  //   if (stderr) {
-  //     console.error(`stderr: ${stderr}`);
-  //     return;
-  //   }
-
-  //   console.log(`stdout: ${stdout}`);
-  // });
 }

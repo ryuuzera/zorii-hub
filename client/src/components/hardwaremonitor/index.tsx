@@ -217,7 +217,7 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
                     </div>
                   </div>
                   <Box sx={{ width: '100%' }} mb={2}>
-                    <LinearProgress variant='buffer' value={parseFloat(item.value ?? '')} />
+                    <LinearProgress variant='determinate' value={parseFloat(item.value ?? '')} />
                   </Box>
                 </div>
               );

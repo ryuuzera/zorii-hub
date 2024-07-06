@@ -1,10 +1,8 @@
 import { ClientTab } from '@/components/client-tab';
-import { GameDrawer } from '@/components/game-drawer';
-import GameList from '@/components/gameList';
 import HardwareMonitor from '@/components/hardwaremonitor';
-import RecentGames from '@/components/recent-games';
 import { Shutdown } from '@/components/shutdown';
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { GamesPage } from '@/page-content/games';
 import { HardwareInfo } from '@/types/response-schemas/hardwareinfo';
 import { RecentGame, SteamGame } from '@/types/response-schemas/steam';
 
@@ -41,11 +39,7 @@ export default async function Home() {
           </TabsList>
         </div>
         <TabsContent value='Games' className='w-full flex flex-col items-center justify-center'>
-          <RecentGames games={games} recent={recent} />
-          <div className='grid min-[320px]:grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 max-w-7xl'>
-            <GameList games={games} />
-          </div>
-          <GameDrawer open={true} currentGame={games && games[3]} />
+          <GamesPage games={games} recent={recent} />
         </TabsContent>
         <TabsContent value='Hardware' className='w-screen flex items-center justify-center'>
           <HardwareMonitor data={hardwareInfo} />

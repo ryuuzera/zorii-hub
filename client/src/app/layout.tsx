@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@/components/theme-provider';
+import { CurrentGameProvider } from '@/hook/current-game';
 import type { Metadata } from 'next';
 import { Open_Sans, Roboto_Mono } from 'next/font/google';
 import './globals.css';
@@ -29,7 +30,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${openSans.variable} ${robotoMono.variable} font-sans`}>
         <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-          {children}
+          <CurrentGameProvider>{children}</CurrentGameProvider>
         </ThemeProvider>
       </body>
     </html>
