@@ -3,6 +3,7 @@ import { error } from 'console';
 import fs from 'fs';
 import path from 'path';
 import vdf from 'vdf';
+import RecentGameRepository from '../../domain/repository/recentgame.repository';
 
 function getSteamLibraryFolders() {
   const steamPath = path.join(process.env['ProgramFiles(x86)'] as string, 'Steam');
@@ -104,21 +105,31 @@ export function listInstalledGames() {
   return installedGames;
 }
 
-export function runSteamGame(appid) {
-  const command = `start steam://run/${appid}`;
-  console.log(command);
+export async function runSteamGame(game) {
+  const recentGame = new RecentGameRepository();
+  console.log(game);
+  try {
+    const result = await recentGame.create({
+      appId: game.appid,
+      title: game.name,
+    });
+  } catch (error: any) {
+    console.log(error.message);
+    return;
+  }
+  const command = `start steam://run/${game.appid}`;
 
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing command: ${error.message}`);
-      return;
-    }
+  // exec(command, (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.error(`Error executing command: ${error.message}`);
+  //     return;
+  //   }
 
-    if (stderr) {
-      console.error(`stderr: ${stderr}`);
-      return;
-    }
+  //   if (stderr) {
+  //     console.error(`stderr: ${stderr}`);
+  //     return;
+  //   }
 
-    console.log(`stdout: ${stdout}`);
-  });
+  //   console.log(`stdout: ${stdout}`);
+  // });
 }

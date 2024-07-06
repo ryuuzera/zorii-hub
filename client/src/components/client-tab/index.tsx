@@ -4,7 +4,7 @@ import { useWakeLock } from 'react-screen-wake-lock';
 import { Tabs } from '../ui/tabs';
 
 export function ClientTab(props: any) {
-  const [opacity, setOpacity] = useState('opacity-0');
+  const [opacity, setOpacity] = useState('opacity-1');
   const { isSupported, released, request, release } = useWakeLock({});
 
   useEffect(() => {

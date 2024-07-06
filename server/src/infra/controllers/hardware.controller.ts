@@ -1,4 +1,4 @@
-import { getCompleteHardwareInfo } from '../services/openhardwaremonitor.service';
+import { getCompleteHardwareInfo } from '../../application/services/openhardwaremonitor.service';
 
 export default class HardwareInfoController {
   async getHardwareInfo(req, res) {

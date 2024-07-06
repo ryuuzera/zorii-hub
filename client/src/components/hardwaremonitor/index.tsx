@@ -5,6 +5,7 @@ import { convertBytes } from '@/utils/converter/byteconverter';
 import { Box, LinearProgress, Typography } from '@mui/material';
 import { Gauge, gaugeClasses } from '@mui/x-charts';
 import { useEffect, useState } from 'react';
+import FireIcon from '../fire-icon';
 import { CpuInfo } from './cpuInfo';
 import { MonitorCard } from './monitorcard';
 
@@ -185,19 +186,39 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
         </div>
         <div className='overflow-x-scroll items-center justify-evenly min-w-[380px] h-[310px] mt-1 gap-3'>
           <div className='flex flex-col h-full w-full'>
-            <div className='flex flex-col w-full items-center'>
+            <div className='flex flex-col w-full items-center mb-2'>
               <Typography variant='h5'>CPU Cores ({cpuInfo?.loads?.length})</Typography>
             </div>
 
             {cpuInfo?.loads?.map((item, index) => {
               return (
-                <div className='flex flex-col gap-1 items-left text-left w-full'>
-                  <span>Core #{index + 1}</span>
-                  <div className='flex flex-row gap-1 w-full'>
-                    <span>{item.value}</span>
-                    <span>{cpuInfo?.clocks && cpuInfo?.clocks[index].value}</span>
-                    <span>{cpuInfo?.temps && cpuInfo?.temps[index].value}</span>
+                <div className='flex flex-col gap-1 items-left text-left w-full '>
+                  <div className='flex flex-row justify-between'>
+                    <div className='flex flex-row space-x-3'>
+                      <Typography variant='body2'>Core #{index + 1}</Typography>
+                      <Typography variant='body2'>{item.value}</Typography>
+                    </div>
+                    <div className='flex flex-row space-x-3 items-center'>
+                      <Typography variant='body2'>{cpuInfo?.clocks && cpuInfo?.clocks[index].value}</Typography>
+
+                      <div className='flex flex-row items-center  gap-1'>
+                        {/* <CircularProgress
+                          size={20}
+                          variant='determinate'
+                          value={cpuInfo?.temps && parseFloat(cpuInfo?.temps[index].value ?? '')}
+                        /> */}
+                        <FireIcon
+                          color={'#fff'}
+                          size={12}
+                          fillPercentage={(cpuInfo?.temps && parseFloat(cpuInfo?.temps[index].value ?? '')) ?? 0}
+                        />
+                        <Typography variant='body2'>{cpuInfo?.temps && cpuInfo?.temps[index].value}</Typography>
+                      </div>
+                    </div>
                   </div>
+                  <Box sx={{ width: '100%' }} mb={2}>
+                    <LinearProgress variant='buffer' value={parseFloat(item.value ?? '')} />
+                  </Box>
                 </div>
               );
             })}

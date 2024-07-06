@@ -12,3 +12,10 @@ export type Images = {
   logo: string;
   portrait: string;
 };
+
+export type RecentGame = {
+  id: number;
+  appId: string;
+  title: string;
+  launchedAt: Date;
+};

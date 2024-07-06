@@ -58,7 +58,7 @@ export default function GameList({ games }: GameListProps) {
             key={item.appid}
             className='flex flex-col h-[230px] w-[155px] p-[3px] hover:p-0 transition-all delay-100'
             onClick={() => {
-              socket.timeout(5000).emit('rungame', { appid: item.appid });
+              socket.timeout(5000).emit('rungame', item);
             }}>
             <Image width={300} height={450} quality={90} alt={item.name} src={item.images.portrait} />
           </div>
