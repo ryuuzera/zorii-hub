@@ -1,6 +1,7 @@
 import { ClientTab } from '@/components/client-tab';
 import HardwareMonitor from '@/components/hardwaremonitor';
 import { Shutdown } from '@/components/shutdown';
+import { Startup } from '@/components/startup';
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GamesPage } from '@/page-content/games';
 import { HardwareInfo } from '@/types/response-schemas/hardwareinfo';
@@ -29,7 +30,7 @@ export default async function Home() {
 
   return (
     <main className='flex w-screen items-center justify-center'>
-      {/* <Startup /> */}
+      <Startup />
       <ClientTab defaultValue='Hardware'>
         <div className='flex flex-row gap-2 item-center justify-center w-full mt-2'>
           <TabsList className='grid w-[500px] grid-cols-3'>

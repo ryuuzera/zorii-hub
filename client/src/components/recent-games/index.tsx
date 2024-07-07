@@ -15,6 +15,7 @@ type RecentGamesProps = {
 export default function RecentGames({ games, recent }: RecentGamesProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [recentGames, setRecentGames] = useState<RecentGame[] | null>(recent);
+  const initialButton = useRef<any>(null);
 
   const slider = useRef<any>(null);
   let isDown = useRef<any>(false);
@@ -98,6 +99,7 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
                 const currentGame = games?.find((game) => game?.appid === item.appId);
                 return (
                   <div
+                    ref={isFirst ? initialButton : null}
                     key={item.appId}
                     className='flex flex-col h-[300px] relative'
                     onMouseLeave={() => setHoveredItem(null)}

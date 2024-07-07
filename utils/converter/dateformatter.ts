@@ -1,17 +1,30 @@
-import { format, isThisMonth, isThisWeek, isToday } from '../../client/node_modules/date-fns';
+import {
+  format,
+  formatDistanceToNow,
+  isThisMonth,
+  isThisWeek,
+  isToday,
+  isYesterday,
+} from '../../client/node_modules/date-fns';
 
 export function formatDate(date: Date) {
+  const now = new Date();
+
   if (isToday(date)) {
-    return 'today';
+    return `today, ${formatDistanceToNow(date, { addSuffix: true })}`;
+  }
+
+  if (isYesterday(date)) {
+    return `yesterday, ${format(date, 'HH:mm')}`;
   }
 
   if (isThisWeek(date)) {
-    return 'last week';
+    return `this week, ${format(date, 'EEEE')}`;
   }
 
   if (isThisMonth(date)) {
-    return 'last month';
+    return `this month, ${format(date, 'dd MMM')}`;
   }
 
-  return format(date, 'MMMM');
+  return `last ${format(date, 'MMMM')}`;
 }

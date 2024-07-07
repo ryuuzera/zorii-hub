@@ -35,7 +35,6 @@ export default function GameList({ games }: GameListProps) {
   };
 
   const handleGameSelect = async (item: SteamGame) => {
-    socket.emit('rungame', item);
     setCurrentGame(item);
     if (await fetchGameData(item)) {
       setOpenDrawer(true);

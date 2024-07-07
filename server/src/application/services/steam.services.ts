@@ -116,19 +116,17 @@ export async function runSteamGame(game) {
     const result = recentGame.list();
     const command = `start steam://run/${game.appid}`;
 
-    // exec(command, (error, stdout, stderr) => {
-    //   if (error) {
-    //     console.error(`Error executing command: ${error.message}`);
-    //     return;
-    //   }
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing command: ${error.message}`);
+        return;
+      }
 
-    //   if (stderr) {
-    //     console.error(`stderr: ${stderr}`);
-    //     return;
-    //   }
-
-    //   console.log(`stdout: ${stdout}`);
-    // });
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+        return;
+      }
+    });
 
     return result;
   } catch (error: any) {
