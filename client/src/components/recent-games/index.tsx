@@ -53,11 +53,11 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
     let sliderRef = null;
     if (slider && slider.current) {
       sliderRef = slider.current;
-      sliderRef.addEventListener('mousedown', one);
-      sliderRef.addEventListener('mousedown', two);
-      sliderRef.addEventListener('mouseleave', three);
-      sliderRef.addEventListener('mouseup', four);
-      sliderRef.addEventListener('mousemove', five);
+      sliderRef?.addEventListener('mousedown', one);
+      sliderRef?.addEventListener('mousedown', two);
+      sliderRef?.addEventListener('mouseleave', three);
+      sliderRef?.addEventListener('mouseup', four);
+      sliderRef?.addEventListener('mousemove', five);
     }
 
     socket.connect();
@@ -70,11 +70,11 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
     return () => {
       socket.removeAllListeners();
       socket.disconnect();
-      sliderRef.removeEventListener('mousedown', one);
-      sliderRef.removeEventListener('mousedown', two);
-      sliderRef.removeEventListener('mouseleave', three);
-      sliderRef.removeEventListener('mouseup', four);
-      sliderRef.removeEventListener('mousemove', five);
+      sliderRef?.removeEventListener('mousedown', one);
+      sliderRef?.removeEventListener('mousedown', two);
+      sliderRef?.removeEventListener('mouseleave', three);
+      sliderRef?.removeEventListener('mouseup', four);
+      sliderRef?.removeEventListener('mousemove', five);
     };
   }, []);
 

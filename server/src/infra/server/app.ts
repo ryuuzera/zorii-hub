@@ -2,10 +2,12 @@ import cors from 'cors';
 import express from 'express';
 import http from 'http';
 // import iconv from 'iconv';
+import { exec } from 'child_process';
 import ffi from 'ffi-napi';
 import path from 'path';
 import { Server } from 'socket.io';
 import { getCompleteHardwareInfo } from '../../application/services/openhardwaremonitor.service';
+import { runExecutable } from '../../application/services/process.services';
 import { runSteamGame } from '../../application/services/steam.services';
 import routes from '../../config/routes';
 
@@ -19,6 +21,8 @@ app.use(express.static('public'));
 
 const steamPath = path.join(process.env['ProgramFiles(x86)'] as string, 'Steam');
 const imagesFolder = path.join(steamPath, 'appcache', 'librarycache');
+
+
 
 app.use('/images', express.static(imagesFolder));
 

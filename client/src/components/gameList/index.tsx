@@ -26,14 +26,18 @@ export default function GameList({ games }: GameListProps) {
   const { setGameInfo } = useGameInfo();
 
   const fetchGameData = async (game: SteamGame) => {
-    const result = await fetch(
-      `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.PORT}/api/steam/gameinfo?appId=' + game?.appid + '&language=en`
-    );
-    if (result.ok) {
-      const res = await result.json();
-      setGameInfo(res[game?.appid as string]['data'] as SteamGameInfo);
+    try {
+      const result = await fetch(
+        `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT}/api/steam/gameinfo?appId=${game?.appid}&language=en`
+      );
+      if (result.ok) {
+        const res = await result.json();
+        setGameInfo(res[game?.appid as string]['data'] as SteamGameInfo);
+      }
+      return result.ok;
+    } catch (error: any) {
+      console.log(error.message);
     }
-    return result.ok;
   };
 
   const handleGameSelect = async (item: SteamGame) => {
@@ -51,7 +55,7 @@ export default function GameList({ games }: GameListProps) {
           let src = item.images.portrait;
           if (!(await isImageUrlValid(src))) {
             const res = await fetch(
-              `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.PORT}/api/steam/image?appId=${item.appid}`
+              `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT}/api/steam/image?appId=${item.appid}`
             );
             src = await res.text();
           }

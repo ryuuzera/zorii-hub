@@ -17,7 +17,7 @@ const nextConfig = {
       },
       {
         protocol: 'http',
-        hostname: NEXT_PUBLIC_HOST,
+        hostname: process.env.NEXT_PUBLIC_HOST,
         port: '3001',
         pathname: '/**',
       },

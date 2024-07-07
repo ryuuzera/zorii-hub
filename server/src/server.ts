@@ -1,3 +1,5 @@
+import { exec } from 'child_process';
+import { runExecutable } from './application/services/process.services';
 import { httpServer } from './infra/server/app';
 
 const logColorEnv = (env: string) => {
@@ -12,5 +14,13 @@ const logColorEnv = (env: string) => {
   return 'cyan';
 };
 
-httpServer.listen(process.env.PORT, () => console.log(`Server running on Port ${process.env.PORT}`));
+const relativeExecutablePath = '../../../runtimes/openhardwarelib/OpenHardwareMonitor.exe';
+exec(`taskkill /im OpenHardwareMonitor.exe /t`, (err, stdout, stderr) => {
+  if (err) {
+    // ignore
+  }
 
+  runExecutable(relativeExecutablePath);
+});
+
+httpServer.listen(process.env.PORT, () => console.log(`Server running on Port ${process.env.PORT}`));
