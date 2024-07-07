@@ -11,7 +11,7 @@ type dataType = 'steam' | 'hardwareinfo' | 'steam/recent';
 
 async function fetchData<T>(type: dataType) {
   try {
-    const result = await fetch(`http://192.168.0.109:3001/api/${type}`, { cache: 'no-cache' });
+    const result = await fetch(`http://${process.env.NEXT_PUBLIC_HOST}:${process.env.PORT}/api/${type}`, { cache: 'no-cache' });
     if (result.ok) {
       return (await result.json()) as T;
     }

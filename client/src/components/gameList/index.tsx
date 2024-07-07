@@ -26,7 +26,9 @@ export default function GameList({ games }: GameListProps) {
   const { setGameInfo } = useGameInfo();
 
   const fetchGameData = async (game: SteamGame) => {
-    const result = await fetch('http://192.168.0.109:3001/api/steam/gameinfo?appId=' + game?.appid + '&language=en');
+    const result = await fetch(
+      `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.PORT}/api/steam/gameinfo?appId=' + game?.appid + '&language=en`
+    );
     if (result.ok) {
       const res = await result.json();
       setGameInfo(res[game?.appid as string]['data'] as SteamGameInfo);
@@ -48,7 +50,9 @@ export default function GameList({ games }: GameListProps) {
         games.map(async (item: any) => {
           let src = item.images.portrait;
           if (!(await isImageUrlValid(src))) {
-            const res = await fetch(`http://192.168.0.109:3001/api/steam/image?appId=${item.appid}`);
+            const res = await fetch(
+              `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.PORT}/api/steam/image?appId=${item.appid}`
+            );
             src = await res.text();
           }
 
