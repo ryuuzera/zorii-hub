@@ -3,6 +3,7 @@ import { socket } from '@/socket';
 import { RecentGame, SteamGame } from '@/types/response-schemas/steam';
 import { formatDate } from '@/utils/converter/dateformatter';
 import { Typography } from '@mui/material';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
@@ -22,26 +23,20 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
   let startX = useRef<any>(null);
   let scrollLeft = useRef<any>(null);
 
-  function one(e: { pageX: number }) {
+  function mouseDown(e: { pageX: number }) {
     isDown.current = true;
     startX.current = e.pageX - slider.current.offsetLeft;
     scrollLeft.current = slider.current.scrollLeft;
   }
 
-  function two(e: { pageX: number }) {
-    isDown.current = true;
-    startX.current = e.pageX - slider.current.offsetLeft;
-    scrollLeft.current = slider.current.scrollLeft;
-  }
-
-  function three() {
+  function mouseLeave() {
     isDown.current = false;
   }
 
-  function four() {
+  function mouseUp() {
     isDown.current = false;
   }
-  function five(e: { preventDefault: () => void; pageX: number }) {
+  function mouseMove(e: { preventDefault: () => void; pageX: number }) {
     if (!isDown.current) return;
     e.preventDefault();
     const x = e.pageX - slider.current.offsetLeft;
@@ -50,31 +45,32 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
   }
 
   useEffect(() => {
+    if (recentGames && recentGames.length > 0) {
+      setHoveredItem(recentGames[0].appId);
+    }
+
     let sliderRef = null;
     if (slider && slider.current) {
       sliderRef = slider.current;
-      sliderRef?.addEventListener('mousedown', one);
-      sliderRef?.addEventListener('mousedown', two);
-      sliderRef?.addEventListener('mouseleave', three);
-      sliderRef?.addEventListener('mouseup', four);
-      sliderRef?.addEventListener('mousemove', five);
+      sliderRef?.addEventListener('mousedown', mouseDown);
+      sliderRef?.addEventListener('mouseleave', mouseLeave);
+      sliderRef?.addEventListener('mouseup', mouseUp);
+      sliderRef?.addEventListener('mousemove', mouseMove);
     }
 
     socket.connect();
 
     socket.on('recentupdate', (data: RecentGame[]) => {
-      console.log(data);
       setRecentGames(data);
     });
 
     return () => {
       socket.removeAllListeners();
       socket.disconnect();
-      sliderRef?.removeEventListener('mousedown', one);
-      sliderRef?.removeEventListener('mousedown', two);
-      sliderRef?.removeEventListener('mouseleave', three);
-      sliderRef?.removeEventListener('mouseup', four);
-      sliderRef?.removeEventListener('mousemove', five);
+      sliderRef?.removeEventListener('mousedown', mouseDown);
+      sliderRef?.removeEventListener('mouseleave', mouseLeave);
+      sliderRef?.removeEventListener('mouseup', mouseUp);
+      sliderRef?.removeEventListener('mousemove', mouseMove);
     };
   }, []);
 
@@ -97,25 +93,31 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
                 const isHovered = hoveredItem === item.appId;
                 const isFirst = i == 0;
                 const currentGame = games?.find((game) => game?.appid === item.appId);
+                const src = isFirst ? currentGame?.images.library : currentGame?.images.portrait;
                 return (
                   <div
                     ref={isFirst ? initialButton : null}
                     key={item.appId}
                     className='flex flex-col h-[300px] relative'
-                    onMouseLeave={() => setHoveredItem(null)}
                     onDoubleClick={!isFirst ? () => handleRunGame(currentGame) : undefined}>
                     <div
-                      onMouseEnter={() => setHoveredItem(item.appId)}
+                      onClick={() => {
+                        setHoveredItem(item.appId);
+                      }}
                       className={`
                     h-[230px] ${0 == i ? 'min-w-[450px]' : 'min-w-[155px]'} 
                     ${!isHovered ? 'p-[5px]' : 'p-0'}  transition-all delay-100
                     ${isHovered ? 'border-solid border-white border-[1px] shadow-lg shadow-indigo-500/20' : ''}
                      z-0
                     ${isFirst && isHovered ? `mr-[-12px] z-10 ` : ''}`}>
-                      <img
+                      <Image
                         draggable='false'
-                        src={isFirst ? currentGame?.images.library : currentGame?.images.portrait}
+                        src={src ?? ''}
                         className='w-full h-full object-center'
+                        width={500}
+                        height={255}
+                        alt={item.title}
+                        quality={50}
                       />
                     </div>
                     {isHovered && (

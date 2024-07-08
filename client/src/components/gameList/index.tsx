@@ -6,6 +6,7 @@ import { SteamGame } from '@/types/response-schemas/steam';
 import { SteamGameInfo } from '@/types/response-schemas/steam-game-info';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { Skeleton } from '../ui/skeleton';
 
 type GameListProps = {
   games: SteamGame[] | null;
@@ -18,6 +19,16 @@ const isImageUrlValid = async (url: string) => {
   } catch (error) {
     return false;
   }
+};
+
+const Skeletons = () => {
+  return (
+    <>
+      {Array.from({ length: 17 }).map(() => (
+        <Skeleton className='h-[255px] w-[155px] rounded-none' />
+      ))}
+    </>
+  );
 };
 
 export default function GameList({ games }: GameListProps) {
@@ -46,26 +57,30 @@ export default function GameList({ games }: GameListProps) {
       setOpenDrawer(true);
     }
   };
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!games) return;
-
     const checkImages = async () => {
       const updatedGames = await Promise.all<SteamGame>(
         games.map(async (item: any) => {
-          let src = item.images.portrait;
+          let src;
+          let isInvalid;
+          const res = await fetch(
+            `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT}/api/steam/image?appId=${item.appid}`
+          );
+          src = await res.text();
           if (!(await isImageUrlValid(src))) {
-            const res = await fetch(
-              `http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_PORT}/api/steam/image?appId=${item.appid}`
-            );
-            src = await res.text();
+            src = item.images.portrait;
+            isInvalid = true;
           }
 
-          const isValid = await isImageUrlValid(src);
-          return isValid ? { ...item, images: { ...item.images, portrait: src } } : null;
+          return !isInvalid ? { ...item, images: { ...item.images, portrait: src } } : null;
         })
       );
 
       setValidGames(updatedGames.filter((game) => game !== null));
+      setLoading(false);
     };
 
     checkImages();
@@ -79,16 +94,20 @@ export default function GameList({ games }: GameListProps) {
 
   return (
     <>
-      {validGames
-        ?.sort((a, b) => a.name.localeCompare(b.name))
-        .map((item: SteamGame) => (
-          <div
-            key={item.appid}
-            className='flex flex-col h-[230px] w-[155px] p-[3px] hover:p-0 transition-all delay-100 shadow-lg shadow-indigo-500/10 border-none'
-            onClick={() => handleGameSelect(item)}>
-            <Image width={300} height={450} quality={90} alt={item.name} src={item.images.portrait} />
-          </div>
-        ))}
+      {loading ? (
+        <Skeletons />
+      ) : (
+        validGames
+          ?.sort((a, b) => a.name.localeCompare(b.name))
+          .map((item: SteamGame) => (
+            <div
+              key={item.appid}
+              className='flex flex-col h-[230px] w-[155px] p-[3px] hover:p-0 transition-all delay-100 shadow-lg shadow-indigo-500/10 border-none'
+              onClick={() => handleGameSelect(item)}>
+              <Image loading='lazy' width={300} height={450} quality={50} alt={item.name} src={item.images.portrait} />
+            </div>
+          ))
+      )}
     </>
   );
 }

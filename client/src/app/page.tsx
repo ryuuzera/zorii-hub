@@ -4,6 +4,7 @@ import { Shutdown } from '@/components/shutdown';
 import { Startup } from '@/components/startup';
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GamesPage } from '@/page-content/games';
+import { HomePage } from '@/page-content/home';
 import { HardwareInfo } from '@/types/response-schemas/hardwareinfo';
 import { RecentGame, SteamGame } from '@/types/response-schemas/steam';
 
@@ -33,7 +34,7 @@ export default async function Home() {
   return (
     <main className='flex w-screen items-center justify-center'>
       <Startup />
-      <ClientTab defaultValue='Hardware'>
+      {/* <ClientTab defaultValue='Hardware'>
         <div className='flex flex-row gap-2 item-center justify-center w-full mt-2'>
           <TabsList className='grid w-[500px] grid-cols-3'>
             <TabsTrigger value='Games'>Steam Games</TabsTrigger>
@@ -50,7 +51,8 @@ export default async function Home() {
         <TabsContent value='Settings'>
           <Shutdown />
         </TabsContent>
-      </ClientTab>
+      </ClientTab> */}
+      <HomePage games={games} recent={recent} hardwareInfo={hardwareInfo} />
     </main>
   );
 }

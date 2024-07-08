@@ -10,7 +10,7 @@ export function ClientTab(props: any) {
   useEffect(() => {
     setTimeout(() => {
       setOpacity('opacity-1');
-    }, 2000);
+    }, 1800);
     if (isSupported) request();
 
     return () => {
@@ -19,7 +19,7 @@ export function ClientTab(props: any) {
   }, []);
 
   return (
-    <Tabs {...props} defaultValue='Games' className={`${opacity} transition-all delay-250 ease-out`}>
+    <Tabs {...props} defaultValue='Games' className={`${opacity} transition-all delay-250 ease-out overflow-hidden`}>
       {props.children}
     </Tabs>
   );

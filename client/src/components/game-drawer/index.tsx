@@ -110,7 +110,3 @@ export function GameDrawer({ open }: GameDrawerProps) {
     </Drawer>
   );
 }
-
-{
-  /* <img className='object-cover w-full h-full rounded-t-sm' src={currentGame?.images.libraryHero} alt='' /> */
-}
