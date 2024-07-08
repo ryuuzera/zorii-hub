@@ -1,13 +1,10 @@
 import cors from 'cors';
 import express from 'express';
-import http from 'http';
-// import iconv from 'iconv';
-import { exec } from 'child_process';
 import ffi from 'ffi-napi';
+import http from 'http';
 import path from 'path';
 import { Server } from 'socket.io';
 import { getCompleteHardwareInfo } from '../../application/services/openhardwaremonitor.service';
-import { runExecutable } from '../../application/services/process.services';
 import { runSteamGame } from '../../application/services/steam.services';
 import routes from '../../config/routes';
 
@@ -21,8 +18,6 @@ app.use(express.static('public'));
 
 const steamPath = path.join(process.env['ProgramFiles(x86)'] as string, 'Steam');
 const imagesFolder = path.join(steamPath, 'appcache', 'librarycache');
-
-
 
 app.use('/images', express.static(imagesFolder));
 
@@ -41,6 +36,7 @@ const MB_YESNO = 0x00000004;
 const MB_ICONQUESTION = 0x00000020;
 const IDYES = 6;
 const IDNO = 7;
+const MB_TOPMOST = 0x00040000;
 
 io.on('connection', (socket) => {
   console.log(`user conected on id ${socket.id}`);
@@ -56,7 +52,7 @@ io.on('connection', (socket) => {
     const messageBuffer = Buffer.from(message, 'utf16le');
     const titleBuffer = Buffer.from(title, 'utf16le');
 
-    const response = user32.MessageBoxW(0, messageBuffer, titleBuffer, MB_YESNO | MB_ICONQUESTION);
+    const response = user32.MessageBoxW(0, messageBuffer, titleBuffer, MB_YESNO | MB_ICONQUESTION | MB_TOPMOST);
     if (response === IDYES) {
       // runShutdown();
       console.log('desligou');

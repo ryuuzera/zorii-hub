@@ -1189,3 +1189,11 @@ body.video-react-full-window .video-react-fullscreen {
   -webkit-transform: translateY(-30px);
   transform: translateY(-30px);
 }
+
+.invisible-scroll::-webkit-scrollbar {
+  display: none;
+}
+.invisible-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
