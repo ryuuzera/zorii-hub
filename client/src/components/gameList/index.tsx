@@ -24,8 +24,8 @@ const isImageUrlValid = async (url: string) => {
 const Skeletons = () => {
   return (
     <>
-      {Array.from({ length: 17 }).map(() => (
-        <Skeleton className='h-[255px] w-[155px] rounded-none' />
+      {Array.from({ length: 17 }).map((item, index) => (
+        <Skeleton key={index * Math.floor(Math.random() * 10 - 1)} className='h-[255px] w-[155px] rounded-none' />
       ))}
     </>
   );

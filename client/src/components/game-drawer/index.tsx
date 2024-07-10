@@ -116,31 +116,66 @@ export function GameDrawer({ open }: GameDrawerProps) {
                 {/* <div className='h-[600px] w-full z-10'></div> */}
               </div>
             </div>
-            <div
-              className='min-h-[300px] max-w-7xl w-full mb-5 mt-5 bg-[rgba(0,0,0,0.2)] 
-            rounded-md px-4 py-5 z-10 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 shadow-lg'>
-              <div className='flex flex-col w-full'>
-                <Typography variant='h5'>Gallery</Typography>
-                <Separator className='my-3 text-zinc-400 opacity-70' />
-                <div className='flex flex-row max-w-7xl overflow-x-auto p-2 space-x-3 '>
-                  {gameInfo?.screenshots?.map((img) => {
-                    return (
-                      <div
-                        key={img.id}
-                        onTouchStart={() => {
-                          setImagePreview(img.path_full);
-                          setDrawerOpen(true);
-                        }}
-                        onTouchEnd={() => setDrawerOpen(false)}
-                        className='shadow-md min-w-[300px] shadow-zinc-900 rounded-sm overflow-hidden mb-3 invisible-scroll'>
-                        <Image alt={img.id.toString()} src={img.path_thumbnail} height={150} width={300} />
-                      </div>
-                    );
-                  })}
+            <div className='min-h-[300px] max-w-7xl w-full '>
+              <div
+                className='flex flex-col w-full mb-5 mt-5  bg-[rgba(0,0,0,0.2)] 
+               rounded-md px-4 py-5 z-10 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 shadow-lg'>
+                {gameInfo?.screenshots?.length > 0 && (
+                  <>
+                    <Typography variant='h5'>Gallery</Typography>
+                    <Separator className='my-3 bg-zinc-800' />
+                    <div className='flex flex-row max-w-7xl overflow-x-auto p-2 space-x-3 '>
+                      {gameInfo?.screenshots?.map((img) => {
+                        let previewInterval: NodeJS.Timeout;
+                        return (
+                          <div
+                            key={img.id}
+                            onTouchStart={() => {
+                              previewInterval = setTimeout(() => {
+                                setImagePreview(img.path_full);
+                                setDrawerOpen(true);
+                              }, 800);
+                            }}
+                            onTouchEnd={() => {
+                              clearTimeout(previewInterval);
+                              setDrawerOpen(false);
+                            }}
+                            className='shadow-md min-w-[300px] shadow-zinc-900 rounded-sm overflow-hidden mb-3 invisible-scroll'>
+                            <Image alt={img.id.toString()} src={img.path_thumbnail} height={150} width={300} />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+                {gameInfo?.movies?.length > 1 && (
+                  <>
+                    <Typography variant='h5'>Videos</Typography>
+                    <Separator className='my-3 bg-zinc-800' />
+                    <div className='flex flex-row max-w-7xl overflow-x-auto p-2 space-x-3 '>
+                      {gameInfo?.movies?.map((video, i) => {
+                        if (i == 0) return;
+                        return (
+                          <div className='min-w-[550px]' key={video.id}>
+                            <Player poster={video.thumbnail}>
+                              <source src={video.webm.max} />
+                            </Player>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+                <Typography variant='h5' mt={2}>
+                  System Requirements
+                </Typography>
+                <Separator className='my-3 bg-zinc-800' />
+                <div className='grid grid-cols-2 max-w-7xl overflow-x-auto p-2 space-x-3 '>
+                  <div dangerouslySetInnerHTML={{ __html: gameInfo?.pc_requirements?.minimum }} />
+                  <div dangerouslySetInnerHTML={{ __html: gameInfo?.pc_requirements?.recommended }} />
                 </div>
               </div>
             </div>
-            <div className='mt-3 w-full' />
           </div>
         </DrawerContent>
       </Drawer>
@@ -151,8 +186,9 @@ export function GameDrawer({ open }: GameDrawerProps) {
         maxWidth='md'
         PaperProps={{
           style: {
-            background: 'black',
+            background: 'rgba(0,0,0,0)',
             boxShadow: 'none',
+            transition: 'all 2s ease',
           },
         }}>
         <div className='py-6 gap-5 flex flex-col items-center justify-center px-5 rounded-md '>

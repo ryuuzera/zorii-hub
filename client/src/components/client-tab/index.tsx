@@ -4,7 +4,7 @@ import { useWakeLock } from 'react-screen-wake-lock';
 import { Tabs } from '../ui/tabs';
 
 export function ClientTab(props: any) {
-  const [opacity, setOpacity] = useState('opacity-0');
+  const [opacity, setOpacity] = useState('opacity-1');
   const { isSupported, released, request, release } = useWakeLock({});
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export function ClientTab(props: any) {
   }, []);
 
   return (
-    <Tabs {...props} defaultValue='Games' className={`${opacity} transition-all delay-250 ease-out overflow-hidden`}>
+    <Tabs {...props} className={`${opacity} transition-all delay-250 ease-out overflow-hidden`}>
       {props.children}
     </Tabs>
   );

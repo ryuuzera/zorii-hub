@@ -1,11 +1,11 @@
 'use client';
 import { ClientTab } from '@/components/client-tab';
 import HardwareMonitor from '@/components/hardwaremonitor';
-import { Shutdown } from '@/components/shutdown';
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { HardwareInfo } from '@/types/response-schemas/hardwareinfo';
 import { RecentGame, SteamGame } from '@/types/response-schemas/steam';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ControlCenter } from './control-center';
 import { GamesPage } from './games';
 
 interface HomePageProps {
@@ -23,12 +23,12 @@ export function HomePage({ games, recent, hardwareInfo }: HomePageProps) {
 
   return (
     <>
-      <ClientTab defaultValue='Hardware'>
+      <ClientTab defaultValue='ControlCenter'>
         <div className='flex flex-row gap-2 item-center justify-center w-full mt-2'>
           <TabsList className='grid w-[500px] grid-cols-3'>
             <TabsTrigger value='Games'>Steam Games</TabsTrigger>
             <TabsTrigger value='Hardware'>Hardware Monitor</TabsTrigger>
-            <TabsTrigger value='Settings'>Settings</TabsTrigger>
+            <TabsTrigger value='ControlCenter'>Control Center</TabsTrigger>
           </TabsList>
         </div>
         <AnimatePresence>
@@ -42,9 +42,10 @@ export function HomePage({ games, recent, hardwareInfo }: HomePageProps) {
               <HardwareMonitor data={hardwareInfo} />
             </motion.div>
           </TabsContent>
-          <TabsContent value='Settings'>
+          <TabsContent value='ControlCenter' className='w-screen flex flex-col items-center justify-center'>
             <motion.div {...pageTransition}>
-              <Shutdown />
+              {/* <Shutdown /> */}
+              <ControlCenter />
             </motion.div>
           </TabsContent>
         </AnimatePresence>

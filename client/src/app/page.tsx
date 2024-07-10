@@ -33,25 +33,7 @@ export default async function Home() {
 
   return (
     <main className='flex w-screen items-center justify-center'>
-      <Startup />
-      {/* <ClientTab defaultValue='Hardware'>
-        <div className='flex flex-row gap-2 item-center justify-center w-full mt-2'>
-          <TabsList className='grid w-[500px] grid-cols-3'>
-            <TabsTrigger value='Games'>Steam Games</TabsTrigger>
-            <TabsTrigger value='Hardware'>Hardware Monitor</TabsTrigger>
-            <TabsTrigger value='Settings'>Settings</TabsTrigger>
-          </TabsList>
-        </div>
-        <TabsContent value='Games' className='w-full flex flex-col items-center justify-center'>
-          <GamesPage games={games} recent={recent} />
-        </TabsContent>
-        <TabsContent value='Hardware' className='w-screen flex items-center justify-center'>
-          <HardwareMonitor data={hardwareInfo} />
-        </TabsContent>
-        <TabsContent value='Settings'>
-          <Shutdown />
-        </TabsContent>
-      </ClientTab> */}
+      {/* <Startup /> */}
       <HomePage games={games} recent={recent} hardwareInfo={hardwareInfo} />
     </main>
   );

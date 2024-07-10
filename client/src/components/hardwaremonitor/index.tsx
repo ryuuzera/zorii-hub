@@ -78,23 +78,25 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
     },
   };
 
-  const storage = Object.keys(localData?.storage!)?.map((key: string) => {
-    return {
-      name: localData?.storage[key].name,
-      temperatures: {
-        min: localData?.storage[key].temperatures?.find((item: HwData) => item.Text.includes('Temperature'))?.Min,
-        value: localData?.storage[key].temperatures?.find((item: HwData) => item.Text.includes('Temperature'))?.Value,
-        max: localData?.storage[key].temperatures?.find((item: HwData) => item.Text.includes('Temperature'))?.Max,
-      },
-      usedSpace: {
-        min: localData?.storage[key].load?.find((item: HwData) => item.Text.includes('Used'))?.Min,
-        value: localData?.storage[key].load?.find((item: HwData) => item.Text.includes('Used'))?.Value,
-        max: localData?.storage[key].load?.find((item: HwData) => item.Text.includes('Used'))?.Max,
-      },
-      remainingLife: localData?.storage[key].levels?.find((item: HwData) => item.Text.includes('Life'))?.Value,
-      total: localData?.storage[key].data?.find((item: HwData) => item.Text.includes('Reads'))?.Value,
-    };
-  });
+  const storage =
+    localData?.storage &&
+    Object.keys(localData?.storage!)?.map((key: string) => {
+      return {
+        name: localData?.storage[key].name,
+        temperatures: {
+          min: localData?.storage[key].temperatures?.find((item: HwData) => item.Text.includes('Temperature'))?.Min,
+          value: localData?.storage[key].temperatures?.find((item: HwData) => item.Text.includes('Temperature'))?.Value,
+          max: localData?.storage[key].temperatures?.find((item: HwData) => item.Text.includes('Temperature'))?.Max,
+        },
+        usedSpace: {
+          min: localData?.storage[key].load?.find((item: HwData) => item.Text.includes('Used'))?.Min,
+          value: localData?.storage[key].load?.find((item: HwData) => item.Text.includes('Used'))?.Value,
+          max: localData?.storage[key].load?.find((item: HwData) => item.Text.includes('Used'))?.Max,
+        },
+        remainingLife: localData?.storage[key].levels?.find((item: HwData) => item.Text.includes('Life'))?.Value,
+        total: localData?.storage[key].data?.find((item: HwData) => item.Text.includes('Reads'))?.Value,
+      };
+    });
 
   return (
     <>
@@ -202,11 +204,6 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
                       <Typography variant='body2'>{cpuInfo?.clocks && cpuInfo?.clocks[index].value}</Typography>
 
                       <div className='flex flex-row items-center  gap-1'>
-                        {/* <CircularProgress
-                          size={20}
-                          variant='determinate'
-                          value={cpuInfo?.temps && parseFloat(cpuInfo?.temps[index].value ?? '')}
-                        /> */}
                         <FireIcon
                           color={'#fff'}
                           size={12}
@@ -226,7 +223,7 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
         </div>
         <div className='flex flex-col items-center justify-evenly min-w-[380px] min-h-[320px] mt-1 gap-3'>
           <Typography variant='h5'>Storage</Typography>
-          {storage.map((item) => {
+          {storage?.map((item) => {
             return (
               <div className='w-full flex flex-col'>
                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
