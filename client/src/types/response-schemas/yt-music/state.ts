@@ -50,3 +50,10 @@ export type Video = {
   durationSeconds: number;
   id: string;
 };
+
+export enum VideoState {
+  Unknown = -1,
+  Paused = 0,
+  Playing = 1,
+  Buffering = 2,
+}

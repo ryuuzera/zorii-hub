@@ -1,9 +1,11 @@
 'use client';
 import { ClientTab } from '@/components/client-tab';
 import HardwareMonitor from '@/components/hardwaremonitor';
+import { Shutdown } from '@/components/shutdown';
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { HardwareInfo } from '@/types/response-schemas/hardwareinfo';
 import { RecentGame, SteamGame } from '@/types/response-schemas/steam';
+import { YMusicState } from '@/types/response-schemas/yt-music/state';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ControlCenter } from './control-center';
 import { GamesPage } from './games';
@@ -12,8 +14,9 @@ interface HomePageProps {
   games: SteamGame[] | null;
   recent: RecentGame[] | null;
   hardwareInfo: HardwareInfo | null;
+  playerState?: YMusicState;
 }
-export function HomePage({ games, recent, hardwareInfo }: HomePageProps) {
+export function HomePage({ games, recent, hardwareInfo, playerState }: HomePageProps) {
   const pageTransition = {
     initial: { opacity: 0, x: 100 },
     animate: { opacity: 1, x: 0 },
@@ -44,8 +47,8 @@ export function HomePage({ games, recent, hardwareInfo }: HomePageProps) {
           </TabsContent>
           <TabsContent value='ControlCenter' className='w-screen flex flex-col items-center justify-center'>
             <motion.div {...pageTransition}>
-              {/* <Shutdown /> */}
-              <ControlCenter />
+              <ControlCenter playerStateData={playerState} />
+              <Shutdown />
             </motion.div>
           </TabsContent>
         </AnimatePresence>

@@ -1,6 +1,7 @@
 'use client';
 import { socket } from '@/socket';
 import { useEffect } from 'react';
+import { Button } from '../ui/button';
 
 export function Shutdown() {
   useEffect(() => {
@@ -10,6 +11,6 @@ export function Shutdown() {
       socket.disconnect();
     };
   }, []);
-  
-  return <button onClick={() => socket.emit('shutdown')}>Desligar</button>;
+
+  return <Button className='mt-5 ml-3' onClick={() => socket.emit('shutdown')}>Desligar</Button>;
 }

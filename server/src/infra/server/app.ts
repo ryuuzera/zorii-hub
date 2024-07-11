@@ -6,6 +6,7 @@ import path from 'path';
 import { Server } from 'socket.io';
 import { getCompleteHardwareInfo } from '../../application/services/openhardwaremonitor.service';
 import { runSteamGame } from '../../application/services/steam.services';
+import { runShutdown } from '../../application/services/win.services';
 import routes from '../../config/routes';
 
 require('dotenv').config();
@@ -46,19 +47,19 @@ io.on('connection', (socket) => {
   });
 
   socket.on('shutdown', () => {
-    const message = 'Are you sure you want to shutdown the system?';
-    const title = 'Confirm Shutdown';
+    // const message = 'Are you sure you want to shutdown the system?';
+    // const title = 'Confirm Shutdown';
 
-    const messageBuffer = Buffer.from(message, 'utf16le');
-    const titleBuffer = Buffer.from(title, 'utf16le');
+    // const messageBuffer = Buffer.from(message, 'utf16le');
+    // const titleBuffer = Buffer.from(title, 'utf16le');
 
-    const response = user32.MessageBoxW(0, messageBuffer, titleBuffer, MB_YESNO | MB_ICONQUESTION | MB_TOPMOST);
-    if (response === IDYES) {
-      // runShutdown();
-      console.log('desligou');
-    } else {
-      console.log('canceled.');
-    }
+    // const response = user32.MessageBoxW(0, messageBuffer, titleBuffer, MB_YESNO | MB_ICONQUESTION | MB_TOPMOST);
+    // if (response === IDYES) {
+    runShutdown();
+    console.log('desligou');
+    // } else {
+    //   console.log('canceled.');
+    // }
   });
 
   setInterval(async () => {
