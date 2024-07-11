@@ -22,7 +22,7 @@ export function YTMusicPlaylist({ playerState, sendCommand }: YTMusicPlaylistPro
                     <div
                       className='flex flex-row w-full items-center'
                       onClick={() => {
-                        sendCommand('playQueueIndex', index);
+                        sendCommand('playQueueIndex', index.toString());
                       }}>
                       <img src={song.thumbnails[0].url} className='w-[65px] mr-3' />
                       <div className='flex flex-col ml-3 gap-2'>
