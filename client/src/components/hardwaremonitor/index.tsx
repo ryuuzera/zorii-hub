@@ -189,7 +189,6 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
             <Typography variant='body1'>Available: {memory.free.value}</Typography>
             <Typography variant='body1'>Total {convertBytes(memory.total ?? 0, 'B', 'GB').toFixed(1)} GB</Typography>
           </div>
-          <div>{JSON.stringify(localData?.network)}</div>
         </div>
         <div className='overflow-x-scroll items-center justify-evenly min-w-[380px] h-[310px] mt-1 gap-3'>
           <div className='flex flex-col h-full w-full'>
