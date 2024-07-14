@@ -15,11 +15,15 @@ type HardwareMonitorProps = {
 
 export default function HardwareMonitor({ data }: HardwareMonitorProps) {
   const [localData, setData] = useState<HardwareInfo | null>(data);
+  const [gamepads, setGamepads] = useState<any>();
 
   useEffect(() => {
     socket.connect();
     socket.on('hardware-info', (data) => {
       setData(data);
+    });
+    socket.on('gamepads', (data) => {
+      setGamepads(data);
     });
     return () => {
       socket.removeAllListeners();
@@ -258,6 +262,7 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
               <p>GPU: {localData?.gpu.gpuName}</p>
               <p>Memory: {`${convertBytes(localData?.memory.memoryTotal ?? 0, 'B', 'GB').toFixed(2)} GB`}</p>
               <p>OS: {localData?.system}</p>
+              {JSON.stringify(gamepads)}
             </div>
           }
         />

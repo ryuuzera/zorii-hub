@@ -1,4 +1,5 @@
 'use client';
+import { Shortcuts } from '@/components/shortcuts';
 import { YTMusicPlayer } from '@/components/yt-music-player';
 import { YTMusicPlaylist } from '@/components/yt-music-playlist';
 import { ytMusicToken, ytMusicURL } from '@/lib/yt-music';
@@ -51,15 +52,26 @@ export function ControlCenter({ playerStateData }: ControlCenterProps) {
     };
   }, []);
 
+  const shortcuts = [
+    { icon: 'power-button.png', command: 'shutdown' },
+    { icon: 'folder.png', command: 'explorer' },
+    { icon: 'hd.png', command: 'hd' },
+    { icon: 'discord.png', command: 'discord' },
+    { icon: 'terminal.png', command: 'terminal' },
+    { icon: 'vscode.png', command: 'vscode' },
+    { icon: 'arcbrowser.png', command: 'arc' },
+    { icon: 'calculator.png', command: 'calc' },
+  ];
   return (
     <>
-      <div className='flex flex-col w-screen max-w-7xl p-2'>
-        <div className='flex flex-row'>
+      <div className='flex flex-col gap-3 w-screen max-w-7xl p-2'>
+        <div className='flex flex-row gap-4 w-full'>
           <YTMusicPlayer sendCommand={sendCommand} playerState={playerState} />
-          <div className='flex flex-1 border h-[300px] mx-5 rounded-md flex-col overflow-auto'>
+          <div className='flex flex-1 border h-[300px] rounded-md flex-col overflow-auto'>
             <YTMusicPlaylist sendCommand={sendCommand} playerState={playerState} />
           </div>
         </div>
+        <Shortcuts shortcuts={shortcuts} />
       </div>
     </>
   );

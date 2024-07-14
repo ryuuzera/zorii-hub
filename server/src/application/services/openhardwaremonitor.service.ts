@@ -1,9 +1,13 @@
 import os from 'os';
 
 async function fetchHardwareInfo() {
-  const request = await fetch(`http://${process.env.HOST}:8085/data.json`);
-  const requestJson = await (await request.json()).Children;
-  return requestJson.find(() => true);
+  try {
+    const request = await fetch(`http://${process.env.HOST}:8085/data.json`);
+    const requestJson = await (await request.json()).Children;
+    return requestJson.find(() => true);
+  } catch (error: any) {
+    console.log(error.message);
+  }
 }
 
 export async function getCompleteHardwareInfo() {

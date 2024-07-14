@@ -1,7 +1,6 @@
 'use client';
 import { ClientTab } from '@/components/client-tab';
 import HardwareMonitor from '@/components/hardwaremonitor';
-import { Shutdown } from '@/components/shutdown';
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { HardwareInfo } from '@/types/response-schemas/hardwareinfo';
 import { RecentGame, SteamGame } from '@/types/response-schemas/steam';
@@ -48,7 +47,7 @@ export function HomePage({ games, recent, hardwareInfo, playerState }: HomePageP
           <TabsContent value='ControlCenter' className='w-screen flex flex-col items-center justify-center'>
             <motion.div {...pageTransition}>
               <ControlCenter playerStateData={playerState} />
-              <Shutdown />
+              {/* <Shutdown /> */}
             </motion.div>
           </TabsContent>
         </AnimatePresence>

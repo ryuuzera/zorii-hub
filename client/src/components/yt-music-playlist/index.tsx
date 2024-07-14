@@ -7,7 +7,7 @@ interface YTMusicPlaylistProps {
 }
 export function YTMusicPlaylist({ playerState, sendCommand }: YTMusicPlaylistProps) {
   return (
-    <Command className='rounded-lg border shadow-md'>
+    <Command className='rounded-lg shadow-md'>
       <CommandList>
         <CommandEmpty>Nothing playing yet.</CommandEmpty>
         {playerState?.player?.queue?.items && playerState?.player?.queue?.items.length > 0 && (
@@ -16,8 +16,9 @@ export function YTMusicPlaylist({ playerState, sendCommand }: YTMusicPlaylistPro
               const selected = playerState?.player.queue.selectedItemIndex == index;
               return (
                 <>
+                  {index == 0 && <CommandSeparator />}
                   <CommandItem
-                    key={song.videoId}
+                    key={song.videoId + index}
                     className={`h-20 ${selected ? 'bg-accent text-accent-foreground' : ''} cursor-pointer`}>
                     <div
                       className='flex flex-row w-full items-center'

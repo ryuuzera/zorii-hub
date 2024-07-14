@@ -1,12 +1,11 @@
 import cors from 'cors';
 import express from 'express';
-import ffi from 'ffi-napi';
 import http from 'http';
 import path from 'path';
 import { Server } from 'socket.io';
 import { getCompleteHardwareInfo } from '../../application/services/openhardwaremonitor.service';
 import { runSteamGame } from '../../application/services/steam.services';
-import { runShutdown } from '../../application/services/win.services';
+import { run } from '../../application/services/win.services';
 import routes from '../../config/routes';
 
 require('dotenv').config();
@@ -29,37 +28,35 @@ const io = new Server(httpServer, {
   },
 });
 
-const user32 = new ffi.Library('user32', {
-  MessageBoxW: ['int32', ['int32', 'string', 'string', 'uint32']],
-});
-
-const MB_YESNO = 0x00000004;
-const MB_ICONQUESTION = 0x00000020;
-const IDYES = 6;
-const IDNO = 7;
-const MB_TOPMOST = 0x00040000;
-
 io.on('connection', (socket) => {
   console.log(`user conected on id ${socket.id}`);
 
   socket.on('rungame', (data) => {
     runSteamGame(data).then((res) => socket.emit('recentupdate', res));
   });
-
   socket.on('shutdown', () => {
-    // const message = 'Are you sure you want to shutdown the system?';
-    // const title = 'Confirm Shutdown';
-
-    // const messageBuffer = Buffer.from(message, 'utf16le');
-    // const titleBuffer = Buffer.from(title, 'utf16le');
-
-    // const response = user32.MessageBoxW(0, messageBuffer, titleBuffer, MB_YESNO | MB_ICONQUESTION | MB_TOPMOST);
-    // if (response === IDYES) {
     runShutdown();
-    console.log('desligou');
-    // } else {
-    //   console.log('canceled.');
-    // }
+  });
+  socket.on('explorer', () => {
+    run('explorer');
+  });
+  socket.on('hd', () => {
+    run('c:\\');
+  });
+  socket.on('discord', () => {
+    run('C:\\Users\\Ryuu\\AppData\\Local\\Discord\\app-1.0.9153\\Discord.exe');
+  });
+  socket.on('terminal', () => {
+    run('wt');
+  });
+  socket.on('vscode', () => {
+    run('code');
+  });
+  socket.on('arc', () => {
+    run('arc --maximized');
+  });
+  socket.on('calc', () => {
+    run('calc');
   });
 
   setInterval(async () => {
@@ -79,3 +76,6 @@ function sendMessage(event, value) {
   io.emit(event, value);
 }
 export { app, httpServer, sendMessage };
+function runShutdown() {
+  throw new Error('Function not implemented.');
+}
