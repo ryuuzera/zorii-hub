@@ -34,7 +34,7 @@ export function HomePage({ games, recent, hardwareInfo, playerState }: HomePageP
           </TabsList>
         </div>
         <AnimatePresence>
-          <TabsContent value='Games' className='w-full flex flex-col items-center justify-center'>
+          <TabsContent value='Games' className='w-screen overflow-x-hidden flex flex-col items-center justify-center'>
             <motion.div {...pageTransition}>
               <GamesPage games={games} recent={recent} />
             </motion.div>

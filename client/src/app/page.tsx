@@ -28,7 +28,7 @@ export default async function Home() {
   ]);
 
   return (
-    <main className='flex w-screen items-center justify-center'>
+    <main className='flex w-screen items-center justify-center overflow-x-hidden'>
       {/* <Startup /> */}
       <HomePage games={games} recent={recent} hardwareInfo={hardwareInfo} playerState={playerState} />
     </main>

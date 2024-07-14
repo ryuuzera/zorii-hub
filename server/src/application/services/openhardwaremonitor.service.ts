@@ -12,6 +12,7 @@ async function fetchHardwareInfo() {
 
 export async function getCompleteHardwareInfo() {
   const user = os.userInfo();
+
   //pc
   const pc = await fetchHardwareInfo();
   const pcName = pc.Text;

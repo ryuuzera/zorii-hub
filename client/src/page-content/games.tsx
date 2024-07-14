@@ -17,7 +17,7 @@ export function GamesPage({ games, recent }: GamesPageProps) {
     <>
       <GameInfoProvider>
         <RecentGames games={games} recent={recent} />
-        <div className='grid min-[320px]:grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 max-w-7xl'>
+        <div className='grid min-[320px]:grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 max-w-7xl overflow-x-hidden'>
           <GameList games={games} />
         </div>
         <GameDrawer open={drawer} />
