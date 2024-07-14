@@ -26,8 +26,8 @@ export function Shortcuts({ shortcuts }: ShortcutsProps) {
   }
 
   return (
-    <div className='flex justify-center items-center h-24 w-full fixed bottom-1 '>
-      <div className='flex flex-row  items-center px-5 py-1 gap-4 border border-slate-800 rounded-xl'>
+    <div className='flex justify-center items-center h-24 w-full fixed -left-1/2 translate-x-1/2 bottom-1 '>
+      <div className='flex flex-row items-center px-5 py-1 gap-4 border border-slate-800 rounded-xl'>
         {shortcuts.map((item) => (
           <button
             className='relative flex h-[68px] w-[68px] p-1 hover:p-0 transition-all delay-200'

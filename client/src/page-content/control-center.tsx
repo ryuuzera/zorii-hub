@@ -64,7 +64,7 @@ export function ControlCenter({ playerStateData }: ControlCenterProps) {
   ];
   return (
     <>
-      <div className='flex flex-col gap-3 w-screen max-w-7xl p-2'>
+      <div className='relative flex flex-col gap-3 w-screen max-w-7xl p-2'>
         <div className='flex flex-row gap-4 w-full'>
           <YTMusicPlayer sendCommand={sendCommand} playerState={playerState} />
           <div className='flex flex-1 border h-[300px] rounded-md flex-col overflow-auto'>
