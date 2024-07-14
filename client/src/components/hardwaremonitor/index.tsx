@@ -14,7 +14,7 @@ type HardwareMonitorProps = {
 };
 
 export default function HardwareMonitor({ data }: HardwareMonitorProps) {
-  const [localData, setData] = useState<any | null>(data);
+  const [localData, setData] = useState<HardwareInfo | null>(data);
   const [gamepads, setGamepads] = useState<any>();
 
   useEffect(() => {
