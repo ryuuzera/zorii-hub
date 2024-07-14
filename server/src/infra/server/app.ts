@@ -5,7 +5,7 @@ import path from 'path';
 import { Server } from 'socket.io';
 import { getCompleteHardwareInfo } from '../../application/services/openhardwaremonitor.service';
 import { runSteamGame } from '../../application/services/steam.services';
-import { run } from '../../application/services/win.services';
+import { run, runShutdown } from '../../application/services/win.services';
 import routes from '../../config/routes';
 
 require('dotenv').config();
@@ -76,6 +76,3 @@ function sendMessage(event, value) {
   io.emit(event, value);
 }
 export { app, httpServer, sendMessage };
-function runShutdown() {
-  throw new Error('Function not implemented.');
-}

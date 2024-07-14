@@ -22,7 +22,7 @@ export function Shortcuts({ shortcuts }: ShortcutsProps) {
   }, []);
 
   function handleShutdown() {
-    alert('shutdown');
+    socket.emit('shutdown');
   }
 
   return (
