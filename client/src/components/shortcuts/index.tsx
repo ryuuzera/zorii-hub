@@ -1,7 +1,8 @@
 'use client';
 import { socket } from '@/socket';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 type Shortcut = {
   icon: string;
@@ -12,8 +13,13 @@ interface ShortcutsProps {
   shortcuts: Shortcut[];
 }
 export function Shortcuts({ shortcuts }: ShortcutsProps) {
+  const [opacity, setOpacity] = useState<string>('opacity-0');
   useEffect(() => {
     socket.connect();
+
+    setTimeout(() => {
+      setOpacity('opacity-1');
+    }, 500);
 
     return () => {
       socket.offAny();
@@ -26,7 +32,11 @@ export function Shortcuts({ shortcuts }: ShortcutsProps) {
   }
 
   return (
-    <div className='flex justify-center items-center h-24 w-full fixed -left-1/2 translate-x-1/2 bottom-1 '>
+    <motion.div
+      className={`${opacity} transition-all delay-700 flex justify-center items-center h-24 w-full fixed -left-1/2 translate-x-1/2 bottom-1`}
+      initial={{ y: 100, x: '50%' }}
+      animate={{ y: 0, x: '50%' }}
+      transition={{ duration: 1, delay: 0.3 }}>
       <div className='flex flex-row items-center px-5 py-1 gap-4 border border-slate-800 rounded-xl'>
         {shortcuts.map((item) => (
           <button
@@ -54,6 +64,6 @@ export function Shortcuts({ shortcuts }: ShortcutsProps) {
           </button>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

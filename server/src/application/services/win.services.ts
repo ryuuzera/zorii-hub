@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { exec, spawn } from 'child_process';
 import ffi from 'ffi-napi';
 
 export function runShutdown() {
@@ -19,8 +19,18 @@ export function runShutdown() {
   });
 }
 
+export function runSpawn(command: string) {
+  const child = spawn(command, {
+    detached: true,
+    stdio: 'ignore',
+    windowsHide: true,
+    shell: true,
+  });
+
+  child.unref();
+}
+
 export function run(command: string) {
-  console.log(`start ${command}`);
   exec(`start ${command}`, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing command: ${error.message}`);

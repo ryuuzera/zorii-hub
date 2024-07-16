@@ -1,11 +1,12 @@
 import cors from 'cors';
 import express from 'express';
+import fs from 'fs';
 import http from 'http';
 import path from 'path';
 import { Server } from 'socket.io';
 import { getCompleteHardwareInfo } from '../../application/services/openhardwaremonitor.service';
 import { runSteamGame } from '../../application/services/steam.services';
-import { run, runShutdown } from '../../application/services/win.services';
+import { run, runShutdown, runSpawn } from '../../application/services/win.services';
 import routes from '../../config/routes';
 
 require('dotenv').config();
@@ -44,19 +45,31 @@ io.on('connection', (socket) => {
     run('c:\\');
   });
   socket.on('discord', () => {
-    run('C:\\Users\\Ryuu\\AppData\\Local\\Discord\\app-1.0.9153\\Discord.exe');
+    const baseDir = path.join(process.env.LOCALAPPDATA!, 'Discord');
+    const versions = fs.readdirSync(baseDir).filter((dir) => dir.startsWith('app-'));
+    const latestVersion = versions.sort().reverse()[0];
+
+    runSpawn(path.join(baseDir, latestVersion, 'Discord.exe'));
   });
   socket.on('terminal', () => {
     run('wt');
   });
   socket.on('vscode', () => {
-    run('code');
+    runSpawn('code');
   });
-  socket.on('arc', () => {
-    run('arc --maximized');
+  socket.on('edge', () => {
+    run('msedge');
   });
   socket.on('calc', () => {
     run('calc');
+  });
+  socket.on('notepad', () => {
+    run('notepad');
+  });
+  socket.on('ytmusic', () => {
+    const baseDir = path.join(process.env.LOCALAPPDATA!, 'youtube_music_desktop_app');
+
+    runSpawn(path.join(baseDir, 'youtube-music-desktop-app.exe'));
   });
 
   setInterval(async () => {

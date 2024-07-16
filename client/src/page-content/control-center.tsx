@@ -59,7 +59,9 @@ export function ControlCenter({ playerStateData }: ControlCenterProps) {
     { icon: 'discord.png', command: 'discord' },
     { icon: 'terminal.png', command: 'terminal' },
     { icon: 'vscode.png', command: 'vscode' },
-    { icon: 'arcbrowser.png', command: 'arc' },
+    { icon: 'edge.png', command: 'edge' },
+    { icon: 'ytmusic.png', command: 'ytmusic' },
+    { icon: 'notepad.png', command: 'notepad' },
     { icon: 'calculator.png', command: 'calc' },
   ];
   return (

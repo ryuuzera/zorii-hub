@@ -25,7 +25,7 @@ export function HomePage({ games, recent, hardwareInfo, playerState }: HomePageP
 
   return (
     <>
-      <ClientTab defaultValue='ControlCenter'>
+      <ClientTab defaultValue='Games'>
         <div className='flex flex-row gap-2 item-center justify-center w-full mt-2'>
           <TabsList className='grid w-[500px] grid-cols-3'>
             <TabsTrigger value='Games'>Steam Games</TabsTrigger>
@@ -47,7 +47,6 @@ export function HomePage({ games, recent, hardwareInfo, playerState }: HomePageP
           <TabsContent value='ControlCenter' className='w-screen flex flex-col items-center justify-center'>
             <motion.div {...pageTransition}>
               <ControlCenter playerStateData={playerState} />
-              {/* <Shutdown /> */}
             </motion.div>
           </TabsContent>
         </AnimatePresence>

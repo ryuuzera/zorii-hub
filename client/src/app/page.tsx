@@ -1,3 +1,4 @@
+import { Startup } from '@/components/startup';
 import { fetchPlayerState } from '@/lib/yt-music';
 import { HomePage } from '@/page-content/home';
 import { HardwareInfo } from '@/types/response-schemas/hardwareinfo';
@@ -29,7 +30,7 @@ export default async function Home() {
 
   return (
     <main className='flex w-screen items-center justify-center overflow-x-hidden'>
-      {/* <Startup /> */}
+      <Startup />
       <HomePage games={games} recent={recent} hardwareInfo={hardwareInfo} playerState={playerState} />
     </main>
   );

@@ -7,7 +7,7 @@ export function Startup() {
   useEffect(() => {
     setTimeout(() => {
       setVisible(false);
-    }, 1800);
+    }, 2000);
   }, []);
 
   return (
