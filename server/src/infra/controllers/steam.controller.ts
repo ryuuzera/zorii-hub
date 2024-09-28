@@ -18,7 +18,6 @@ export class SteamController {
     const imagesFolder = path.join(steamPath, 'appcache', 'librarycache');
 
     const imageName = `${appId}_library_600x900.jpg`;
-    // const imagePath = path.join(imagesFolder, imageName);
 
     const imageUrl = `${req.protocol}://${req.get('host')}/images/${imageName}`;
 

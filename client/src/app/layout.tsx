@@ -1,5 +1,8 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { CurrentGameProvider } from '@/hook/current-game';
+import { GameInfoProvider } from '@/hook/game-info';
+import { SocketProvider } from '@/hook/socket-connection';
+import { TabController } from '@/page-content/home';
 import type { Metadata } from 'next';
 import { Open_Sans, Roboto_Mono } from 'next/font/google';
 import './globals.css';
@@ -30,7 +33,13 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${openSans.variable} ${robotoMono.variable} font-sans`}>
         <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-          <CurrentGameProvider>{children}</CurrentGameProvider>
+          <SocketProvider>
+            <GameInfoProvider>
+              <CurrentGameProvider>
+                <TabController className='z-0'>{children}</TabController>
+              </CurrentGameProvider>
+            </GameInfoProvider>
+          </SocketProvider>
         </ThemeProvider>
       </body>
     </html>

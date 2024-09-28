@@ -2,7 +2,7 @@
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { useCurrentGame } from '@/hook/current-game';
 import { useGameInfo } from '@/hook/game-info';
-import { socket } from '@/socket';
+import { useSocket } from '@/hook/socket-connection';
 import { SteamGame } from '@/types/response-schemas/steam';
 import { Dialog as MuiDrawer, Typography } from '@mui/material';
 import he from 'he';
@@ -44,11 +44,13 @@ function GameBackground({ currentGame }: { currentGame: SteamGame }) {
     </>
   );
 }
-export function GameDrawer({ open }: GameDrawerProps) {
+export function GameDrawer() {
   const { gameInfo } = useGameInfo();
-  const { currentGame, setOpenDrawer } = useCurrentGame();
+  const { currentGame, setOpenDrawer, drawer } = useCurrentGame();
   const [imagePreview, setImagePreview] = useState<string>();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const { socket } = useSocket();
+
   useEffect(() => {
     const handleContextMenu = (event: MouseEvent) => {
       event.preventDefault();
@@ -56,16 +58,13 @@ export function GameDrawer({ open }: GameDrawerProps) {
 
     document.addEventListener('contextmenu', handleContextMenu);
 
-    socket.connect();
-
     return () => {
       document.removeEventListener('contextmenu', handleContextMenu);
-      socket.disconnect();
     };
   }, []);
   return (
     <>
-      <Drawer onClose={() => setOpenDrawer(false)} open={open}>
+      <Drawer onClose={() => setOpenDrawer(false)} open={drawer}>
         <DrawerContent className='w-full h-[80%] bg-gray-900 rounded-md'>
           <DrawerHeader className='z-10'>
             <div className='grid grid-cols-2 w-full'>

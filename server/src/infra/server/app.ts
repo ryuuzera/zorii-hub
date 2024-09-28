@@ -6,7 +6,7 @@ import path from 'path';
 import { Server } from 'socket.io';
 import { getCompleteHardwareInfo } from '../../application/services/openhardwaremonitor.service';
 import { runSteamGame } from '../../application/services/steam.services';
-import { run, runShutdown, runSpawn } from '../../application/services/win.services';
+import { run, runShutdown, runSpawn, volumeUp } from '../../application/services/win.services';
 import routes from '../../config/routes';
 
 require('dotenv').config();
@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
   console.log(`user conected on id ${socket.id}`);
 
   socket.on('rungame', (data) => {
-    runSteamGame(data).then((res) => socket.emit('recentupdate', res));
+    runSteamGame(data, socket).then((res) => socket.emit('recentupdate', res));
   });
   socket.on('shutdown', () => {
     runShutdown();
@@ -75,6 +75,11 @@ io.on('connection', (socket) => {
   setInterval(async () => {
     getCompleteHardwareInfo().then((hardwareInfo) => socket.emit('hardware-info', hardwareInfo));
   }, 500);
+
+  socket.on('volumeUp', () => {
+    console.log('volumeUp');
+    volumeUp();
+  });
 
   socket.on('disconnect', () => {
     console.log(`User disconnected with id ${socket.id}`);

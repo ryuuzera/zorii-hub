@@ -1,7 +1,6 @@
 'use client';
 import { useCurrentGame } from '@/hook/current-game';
 import { useGameInfo } from '@/hook/game-info';
-import { socket } from '@/socket';
 import { SteamGame } from '@/types/response-schemas/steam';
 import { SteamGameInfo } from '@/types/response-schemas/steam-game-info';
 import Image from 'next/image';
@@ -84,12 +83,6 @@ export default function GameList({ games }: GameListProps) {
     };
 
     checkImages();
-
-    socket.connect();
-    return () => {
-      socket.removeAllListeners();
-      socket.disconnect();
-    };
   }, []);
 
   return (

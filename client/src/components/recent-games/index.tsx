@@ -1,5 +1,5 @@
 'use client';
-import { socket } from '@/socket';
+import { useSocket } from '@/hook/socket-connection';
 import { RecentGame, SteamGame } from '@/types/response-schemas/steam';
 import { formatDate } from '@/utils/converter/dateformatter';
 import { Typography } from '@mui/material';
@@ -7,6 +7,8 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
+import { motion } from 'framer-motion';
+import { pageTransition } from '@/lib/transitions';
 
 type RecentGamesProps = {
   games: SteamGame[] | null;
@@ -17,6 +19,7 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [recentGames, setRecentGames] = useState<RecentGame[] | null>(recent);
   const initialButton = useRef<any>(null);
+  const { socket } = useSocket();
 
   const slider = useRef<any>(null);
   let isDown = useRef<any>(false);
@@ -58,15 +61,11 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
       sliderRef?.addEventListener('mousemove', mouseMove);
     }
 
-    socket.connect();
-
     socket.on('recentupdate', (data: RecentGame[]) => {
       setRecentGames(data);
     });
 
     return () => {
-      socket.removeAllListeners();
-      socket.disconnect();
       sliderRef?.removeEventListener('mousedown', mouseDown);
       sliderRef?.removeEventListener('mouseleave', mouseLeave);
       sliderRef?.removeEventListener('mouseup', mouseUp);
@@ -82,6 +81,7 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
   return (
     <>
       {recentGames && recentGames.length > 0 ? (
+        <motion.div {...pageTransition}>
         <div className='flex flex-col'>
           <Typography variant='h6' px={1}>
             Recent games
@@ -172,6 +172,7 @@ export default function RecentGames({ games, recent }: RecentGamesProps) {
             }
           `}</style>
         </div>
+        </motion.div>
       ) : null}
     </>
   );

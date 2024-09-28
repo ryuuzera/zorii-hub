@@ -1,5 +1,12 @@
 import { exec, spawn } from 'child_process';
 import ffi from 'ffi-napi';
+import {
+  APPCOMMAND_VOLUME_DOWN,
+  APPCOMMAND_VOLUME_MUTE,
+  APPCOMMAND_VOLUME_UP,
+  HWND_BROADCAST,
+  WM_APPCOMMAND,
+} from '../const/win.const';
 
 export function runShutdown() {
   const command = `start shutdown -s -t 0 -f`;
@@ -14,8 +21,6 @@ export function runShutdown() {
       console.error(`stderr: ${stderr}`);
       return;
     }
-
-    console.log(`stdout: ${stdout}`);
   });
 }
 
@@ -46,10 +51,21 @@ export function run(command: string) {
 
 const user32 = new ffi.Library('user32', {
   MessageBoxW: ['int32', ['int32', 'string', 'string', 'uint32']],
+  SendMessageW: ['int32', ['uint32', 'uint32', 'uint32', 'uint32']],
 });
 
-const MB_YESNO = 0x00000004;
-const MB_ICONQUESTION = 0x00000020;
-const IDYES = 6;
-const IDNO = 7;
-const MB_TOPMOST = 0x00040000;
+function sendVolumeCommand(command: number): void {
+  user32.SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, command);
+}
+
+export function volumeUp(): void {
+  sendVolumeCommand(APPCOMMAND_VOLUME_UP);
+}
+
+export function volumeDown(): void {
+  sendVolumeCommand(APPCOMMAND_VOLUME_DOWN);
+}
+
+export function muteVolume(): void {
+  sendVolumeCommand(APPCOMMAND_VOLUME_MUTE);
+}

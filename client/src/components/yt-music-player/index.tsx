@@ -51,6 +51,7 @@ interface YTMusicPlayerProps {
   sendCommand: (command: string, data?: any) => Promise<void>;
 }
 export function YTMusicPlayer({ playerState, sendCommand }: YTMusicPlayerProps) {
+  console.log(JSON.stringify(playerState, null, 2));
   const [musicProgress, setProgress] = useState<number[]>([playerState?.player?.videoProgress ?? 0]);
   const glassEffect = 'bg-black rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-85 border';
 
@@ -126,8 +127,16 @@ export function YTMusicPlayer({ playerState, sendCommand }: YTMusicPlayerProps) 
                   <IconButton disableRipple onClick={() => sendCommand('previous')}>
                     <SkipBack />
                   </IconButton>
-                  <IconButton disableRipple onClick={() => sendCommand('playPause')}>
-                    {playerState?.player.trackState == VideoState.Paused ? <Play /> : <Pause />}
+                  <IconButton
+                    disableRipple
+                    onClick={() => {
+                      sendCommand('playPause');
+                    }}>
+                    {[VideoState.Paused, VideoState.Unknown].includes(playerState?.player.trackState as VideoState) ? (
+                      <Play />
+                    ) : (
+                      <Pause />
+                    )}
                   </IconButton>
                   <IconButton disableRipple onClick={() => sendCommand('next')}>
                     <SkipForward />

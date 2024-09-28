@@ -2,8 +2,10 @@
 import { Shortcuts } from '@/components/shortcuts';
 import { YTMusicPlayer } from '@/components/yt-music-player';
 import { YTMusicPlaylist } from '@/components/yt-music-playlist';
+import { pageTransition } from '@/lib/transitions';
 import { ytMusicToken, ytMusicURL } from '@/lib/yt-music';
 import { YMusicState } from '@/types/response-schemas/yt-music/state';
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
@@ -66,15 +68,19 @@ export function ControlCenter({ playerStateData }: ControlCenterProps) {
   ];
   return (
     <>
-      <div className='relative flex flex-col gap-3 w-screen max-w-7xl p-2'>
-        <div className='flex flex-row gap-4 w-full'>
-          <YTMusicPlayer sendCommand={sendCommand} playerState={playerState} />
-          <div className='flex flex-1 border h-[300px] rounded-md flex-col overflow-auto'>
-            <YTMusicPlaylist sendCommand={sendCommand} playerState={playerState} />
-          </div>
+      <motion.div {...pageTransition}>
+        <div className='relative flex flex-col gap-3 w-screen max-w-7xl p-2'>
+          {playerState?.player && (
+            <div className='flex flex-row gap-4 w-full'>
+              <YTMusicPlayer sendCommand={sendCommand} playerState={playerState} />
+              <div className='flex flex-1 border h-[300px] rounded-md flex-col overflow-auto'>
+                <YTMusicPlaylist sendCommand={sendCommand} playerState={playerState} />
+              </div>
+            </div>
+          )}
+          <Shortcuts shortcuts={shortcuts} />
         </div>
-        <Shortcuts shortcuts={shortcuts} />
-      </div>
+      </motion.div>
     </>
   );
 }

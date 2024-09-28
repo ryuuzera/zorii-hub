@@ -1,5 +1,5 @@
-const { spawn } = require('child_process');
-const path = require('path');
+import { spawn } from 'child_process';
+import path from 'path';
 
 export function runExecutable(relativeExePath) {
   const exePath = path.resolve(__dirname, relativeExePath);
