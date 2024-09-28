@@ -36,7 +36,7 @@ export default function RootLayout({
           <SocketProvider>
             <GameInfoProvider>
               <CurrentGameProvider>
-                <TabController className='z-0'>{children}</TabController>
+                <TabController>{children}</TabController>
               </CurrentGameProvider>
             </GameInfoProvider>
           </SocketProvider>

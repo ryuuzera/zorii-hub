@@ -4,6 +4,7 @@ import RecentGames from '@/components/recent-games';
 import { fetchData } from '@/lib/http-utils';
 import { RecentGame, SteamGame } from '@/types/response-schemas/steam';
 
+export const fetchCache = 'force-no-store';
 
 export default async function GamesPage() {
   const [games, recent] = await Promise.all([fetchData<SteamGame[]>('steam'), fetchData<RecentGame[]>('steam/recent')]);

@@ -23,7 +23,10 @@ type RunningGameInfo = {
 export default function HardwareMonitor({ data }: HardwareMonitorProps) {
   const [localData, setData] = useState<HardwareInfo | null>(data);
   const [runningGameInfo, setRunningGameInfo] = useState<RunningGameInfo | null>(null);
+  const [debouncedFramerate, setDebouncedFramerate] = useState<number>(0);
   const { socket } = useSocket();
+
+  let handler: any;
 
   useEffect(() => {
     socket.on('hardware-info', (data) => {
@@ -31,6 +34,11 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
     });
     socket.on('framerate', (data) => {
       setRunningGameInfo(data);
+      if (handler) {
+        clearTimeout(handler);
+        handler = null;
+      }
+      handler = setTimeout(() => setDebouncedFramerate(data.framerate), 200);
     });
     socket.on('presentmon-exit', () => {
       setRunningGameInfo(null);
@@ -260,7 +268,7 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
               <Typography variant='h6'>{runningGameInfo?.gameTitle ?? 'Teste Nome de Jogo'}</Typography>
               <div className='flex flex-row gap-3'>
                 <Typography variant='h1' className='transition-all delay-200'>
-                  {Math.trunc(runningGameInfo?.framerate ?? 0)}
+                  {Math.trunc(debouncedFramerate ?? 0)}
                 </Typography>
                 <Typography variant='body1' className='self-end mb-5'>
                   fps
