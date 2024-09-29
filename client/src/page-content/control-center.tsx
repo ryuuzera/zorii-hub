@@ -71,7 +71,7 @@ export function ControlCenter({ playerStateData }: ControlCenterProps) {
   return (
     <>
       <motion.div {...pageTransition}>
-        <div className='relative flex flex-col gap-3 h-[calc(100vh-55px)] w-screen max-w-7xl p-2'>
+        <div className='relative flex flex-col gap-3 h-[calc(100vh-55px)] w-screen max-w-7xl p-2 mt-2'>
           {playerState?.player && (
             <div className='flex flex-row gap-4 w-full'>
               <YTMusicPlayer sendCommand={sendCommand} playerState={playerState} />

@@ -4,7 +4,7 @@ import robot from 'robotjs';
 import { Server } from 'socket.io';
 import { getCompleteHardwareInfo } from '../../application/services/openhardwaremonitor.service';
 import { runSteamGame } from '../../application/services/steam.services';
-import { run, runShutdown, runSpawn, volumeUp } from '../../application/services/win.services';
+import { run, runShutdown, runSpawn } from '../../application/services/win.services';
 
 export function setupSocket(io: Server) {
   let lastPosition = { x: 0, y: 0 };
@@ -55,11 +55,6 @@ export function setupSocket(io: Server) {
       getCompleteHardwareInfo().then((hardwareInfo) => socket.emit('hardware-info', hardwareInfo));
     }, 500);
 
-    socket.on('volumeUp', () => {
-      console.log('volumeUp');
-      volumeUp();
-    });
-
     socket.on('disconnect', () => {
       console.log(`User disconnected with id ${socket.id}`);
     });
@@ -83,6 +78,30 @@ export function setupSocket(io: Server) {
 
     socket.on('mousestart', () => {
       socket.emit('startpos', robot.getMousePos());
+    });
+
+    socket.on('left-click', () => {
+      robot.mouseClick('left');
+    });
+
+    socket.on('right-click', () => {
+      robot.mouseClick('right');
+    });
+
+    socket.on('volumeUp', () => {
+      robot.keyTap('audio_vol_up');
+    });
+
+    socket.on('volumeDown', () => {
+      robot.keyTap('audio_vol_down');
+    });
+
+    socket.on('volumeMute', () => {
+      robot.keyTap('audio_mute');
+    });
+
+    socket.on('printscreen', () => {
+      robot.typeStringDelayed('printscreen', 200);
     });
   });
 

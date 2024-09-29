@@ -1,6 +1,8 @@
 'use client';
 import { useSocket } from '@/hook/socket-connection';
+import { Fullscreen, Volume1, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { Button } from '../ui/button';
 
 export default function SystemControls() {
   const { socket } = useSocket();
@@ -61,11 +63,15 @@ export default function SystemControls() {
     setIsDragging(false);
   };
 
+  const sendMessage = (message: string) => {
+    socket.emit(message);
+  };
+
   return (
     <>
-      <div className='flex flex-row h-[280px] w-full gap-2'>
+      <div className='flex flex-row h-[260px] w-full'>
         <div
-          className='h-full w-full border-2'
+          className='h-full w-[80%] border-[1px] rounded-md flex flex-row-reverse ml-3'
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -73,9 +79,41 @@ export default function SystemControls() {
           onTouchCancel={handleTouchEnd}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}></div>
+          onMouseLeave={handleMouseUp}
+        />
+        <div className='h-full w-32 flex flex-col p-1 gap-1'>
+          <Button
+            className='h-full border-[1px] rounded-md bg-transparent text-white'
+            onClick={() => sendMessage('left-click')}>
+            L
+          </Button>
+          <Button
+            className='h-full border-[1px] rounded-md bg-transparent text-white'
+            onClick={() => sendMessage('right-click')}>
+            R
+          </Button>
+        </div>
 
-        <div className='h-full w-full border-2'>{JSON.stringify(lastPosition)}</div>
+        <div className='h-full w-full flex flex-row items-center justify-center'>
+          <Button
+            className='h-24 w-24 border-2 m-2 bg-transparent text-white'
+            onClick={() => sendMessage('volumeDown')}>
+            <Volume1 />
+          </Button>
+          <Button className='h-24 w-24 border-2 m-2 bg-transparent text-white' onClick={() => sendMessage('volumeUp')}>
+            <Volume2 />
+          </Button>
+          <Button
+            className='h-24 w-24 border-2 m-2 bg-transparent text-white'
+            onClick={() => sendMessage('volumeMute')}>
+            <VolumeX />
+          </Button>
+          <Button
+            className='h-24 w-24 border-2 m-2 bg-transparent text-white'
+            onClick={() => sendMessage('printscreen')}>
+            <Fullscreen />
+          </Button>
+        </div>
       </div>
     </>
   );

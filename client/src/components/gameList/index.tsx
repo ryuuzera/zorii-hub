@@ -24,7 +24,7 @@ const Skeletons = () => {
   return (
     <>
       {Array.from({ length: 17 }).map((item, index) => (
-        <Skeleton key={index * Math.floor(Math.random() * 10 - 1)} className='h-[255px] w-[155px] rounded-none' />
+        <Skeleton key={index * Math.floor(Math.random() * 100 - 1)} className='h-[255px] w-[155px] rounded-none' />
       ))}
     </>
   );
@@ -92,9 +92,9 @@ export default function GameList({ games }: GameListProps) {
       ) : (
         validGames
           ?.sort((a, b) => a.name.localeCompare(b.name))
-          .map((item: SteamGame) => (
+          .map((item: SteamGame, index) => (
             <div
-              key={item.appid}
+              key={item.appid + (index + item.name)}
               className='flex flex-col h-[230px] w-[155px] p-[3px] hover:p-0 transition-all delay-100 shadow-lg shadow-indigo-500/10 border-none'
               onClick={() => handleGameSelect(item)}>
               <Image loading='lazy' width={300} height={450} quality={50} alt={item.name} src={item.images.portrait} />
