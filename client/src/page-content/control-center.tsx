@@ -1,5 +1,6 @@
 'use client';
 import { Shortcuts } from '@/components/shortcuts';
+import SystemControls from '@/components/system-controls';
 import { YTMusicPlayer } from '@/components/yt-music-player';
 import { YTMusicPlaylist } from '@/components/yt-music-playlist';
 import { pageTransition } from '@/lib/transitions';
@@ -12,6 +13,7 @@ import { io } from 'socket.io-client';
 interface ControlCenterProps {
   playerStateData?: YMusicState;
 }
+
 export function ControlCenter({ playerStateData }: ControlCenterProps) {
   const socket = io(`${ytMusicURL}realtime`, {
     autoConnect: false,
@@ -69,7 +71,7 @@ export function ControlCenter({ playerStateData }: ControlCenterProps) {
   return (
     <>
       <motion.div {...pageTransition}>
-        <div className='relative flex flex-col gap-3 w-screen max-w-7xl p-2'>
+        <div className='relative flex flex-col gap-3 h-[calc(100vh-55px)] w-screen max-w-7xl p-2'>
           {playerState?.player && (
             <div className='flex flex-row gap-4 w-full'>
               <YTMusicPlayer sendCommand={sendCommand} playerState={playerState} />
@@ -78,8 +80,9 @@ export function ControlCenter({ playerStateData }: ControlCenterProps) {
               </div>
             </div>
           )}
-          <Shortcuts shortcuts={shortcuts} />
+          <SystemControls />
         </div>
+        <Shortcuts shortcuts={shortcuts} />
       </motion.div>
     </>
   );
