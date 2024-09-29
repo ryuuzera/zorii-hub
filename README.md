@@ -1,38 +1,40 @@
-
+![2024-09-2821-40-34-ezgif com-optimize (1)](https://github.com/user-attachments/assets/aa49c478-55a0-4d5b-8238-f9483976952e)
 ## 🎮 Zorii Hub - Ultimate Remote Steam Game Launcher 🚀
 
 Welcome to **Zorii Hub**, the next-level app to seamlessly launch and manage your Steam games! Whether you're a casual player or a hardcore gamer, Zorii Hub brings convenience and efficiency right to your desktop. Get ready to elevate your gaming experience with features that make remote game launching.
 <details>
    <summary><h3>📷 Screenshots</h3></summary>
 
- <table align="center">
+<table align="center">
   <tr>
-  <td><img width="335" src="https://github.com/user-attachments/assets/a68bb1a9-aebc-4a82-9216-61036c154808"/></td>
-  <td><img width="335" src="https://github.com/user-attachments/assets/9fdb3100-1d44-4608-a22c-a3a15950c57c"/></tr></td>
-  </table>
- <table align="center">
-  <tr><td>Boot animation</td><td>Steam Games Launcher</td></tr>
+    <td><img width="335" src="https://github.com/user-attachments/assets/a68bb1a9-aebc-4a82-9216-61036c154808"/></td>
+    <td><img width="335" src="https://github.com/user-attachments/assets/9fdb3100-1d44-4608-a22c-a3a15950c57c"/></td>
+  </tr>
   <tr>
-  <td><img width="335" src="https://github.com/user-attachments/assets/351eb8c5-7f3d-4eb6-ab15-e93ce1cac502"/></td>
-  <td><img width="335" src="https://github.com/user-attachments/assets/378aa71b-3b94-4747-abcb-4dd376b079d6"/></tr></td>
-  </table>
-  
-  <table align="center">
-  <tr><td>Game information on Select</td><td>Hardware Real-time monitoring</td></tr>
+    <td>Boot animation</td>
+    <td>Steam Games Launcher</td>
+  </tr>
   <tr>
-  <td><img width="335" src="https://github.com/user-attachments/assets/05e213f0-2ee6-4bf6-9de7-e0ce4f9eb729"/>
-  </td>
-  <td><img width="335" src="https://github.com/user-attachments/assets/13f05df2-4e79-45c2-8271-7a3ab97c8f6c"/></tr></td>
-  </table>
-  
-  <table align="center">
-  <tr><td>Game & Framerate</td></tr>
- 
-  <td><img width="335" src="https://github.com/user-attachments/assets/544fef4e-c14a-4ced-a257-5e6f3da3ac94"/>
-  </td>
-
-  <td><img width="335" src="https://github.com/user-attachments/assets/49b2e18d-c686-4776-861d-684f6d8127ca"/>	</td>
-  </table>
+    <td><img width="335" src="https://github.com/user-attachments/assets/351eb8c5-7f3d-4eb6-ab15-e93ce1cac502"/></td>
+    <td><img width="335" src="https://github.com/user-attachments/assets/378aa71b-3b94-4747-abcb-4dd376b079d6"/></td>
+  </tr>
+  <tr>
+    <td>Game information on Select</td>
+    <td>Hardware Real-time monitoring</td>
+  </tr>
+  <tr>
+    <td><img width="335" src="https://github.com/user-attachments/assets/05e213f0-2ee6-4bf6-9de7-e0ce4f9eb729"/></td>
+    <td><img width="335" src="https://github.com/user-attachments/assets/13f05df2-4e79-45c2-8271-7a3ab97c8f6c"/></td>
+  </tr>
+  <tr>
+    <td>Game & Framerate</td>
+     <td>Remote PC Control</td>
+  </tr>
+  <tr>
+    <td><img width="335" src="https://github.com/user-attachments/assets/49b2e18d-c686-4776-861d-684f6d8127ca"/></td>
+    <td><img width="335" src="https://github.com/user-attachments/assets/4e4f862b-d2aa-42e9-9c5c-89cdd11626fb"/></td>
+  </tr>
+</table>
   </details>
 <details open>
   <summary><h3>🌟 Key Features</h3></summary>
