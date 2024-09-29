@@ -111,4 +111,6 @@ The following technologies are used in Zorii Hub:
 - <img src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/windows.svg" alt="PresentMon" width="20" height="20"/> **OpenHarwareMonitor**: Get all hardware information.
 
 - <img src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/youtubemusic.svg" alt="YouTube Music" width="20" height="20"/> **YT Music Desktop Companion Server**: Enables remote control of YouTube Music directly from the app.
+
+- **SQLite**: Store recent game information
 </details>
