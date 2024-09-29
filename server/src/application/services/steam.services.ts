@@ -1,15 +1,54 @@
 import { exec } from 'child_process';
 import { error } from 'console';
 import fs from 'fs';
+import ini from 'ini';
 import path from 'path';
 import vdf from 'vdf';
 import RecentGameRepository from '../../domain/repository/recentgame.repository';
 import { startPresentMon } from './presentmon.services';
-import { Socket } from 'socket.io';
-import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+
+function steamExists(steamDir: string): boolean {
+  return fs.existsSync(path.join(steamDir, 'steam.exe'));
+}
+
+export function getSteamPath() {
+  const possibleDirs = [
+    path.join(process.env['ProgramFiles(x86)'] as string, 'Steam'),
+    path.join(process.env['ProgramFiles'] as string, 'Steam'),
+    path.join(process.env.LOCALAPPDATA as string, 'Steam'),
+    path.join('C:', 'Steam'),
+  ];
+
+  const configFilePath = './config.ini';
+
+  if (fs.existsSync(configFilePath)) {
+    const config = ini.parse(fs.readFileSync(configFilePath, 'utf-8'));
+
+    if (config.steam && config.steam.path) {
+      const steamPathFromIni = config.steam.path;
+
+      if (steamExists(steamPathFromIni)) {
+        return steamPathFromIni;
+      }
+    }
+  }
+
+  let steamPath = possibleDirs.find(steamExists);
+
+  if (steamPath) {
+    const config = { steam: { path: steamPath } };
+    fs.writeFileSync('./config.ini', ini.stringify(config));
+
+    return steamPath;
+  }
+
+  throw new Error(
+    'Steam installation path not found. Please set the correct Steam installation path in the config.ini file.'
+  );
+}
 
 function getSteamLibraryFolders() {
-  const steamPath = path.join(process.env['ProgramFiles(x86)'] as string, 'Steam');
+  const steamPath = getSteamPath();
   const libraryFoldersPath = path.join(steamPath, 'steamapps', 'libraryfolders.vdf');
 
   let libraryFoldersContent: string;
@@ -115,17 +154,6 @@ export function listInstalledGames() {
   return installedGames;
 }
 
-function isProcessRunning(processName: string) {
-  return new Promise((resolve, reject) => {
-    exec(`tasklist`, (err, stdout, stderr) => {
-      if (err) {
-        return reject(`Error executing tasklist: ${stderr}`);
-      }
-
-      resolve(stdout.toLowerCase().includes(processName.toLowerCase()));
-    });
-  });
-}
 function getRunningProcesses(): Promise<any[]> {
   return new Promise((resolve, reject) => {
     exec('tasklist', (error, stdout) => {
@@ -136,8 +164,8 @@ function getRunningProcesses(): Promise<any[]> {
         .split('\n')
         .slice(3)
         .map((line) => {
-          const name = line.substring(0, 25).split('.')[0].trim() + '.exe'; 
-          const memoryUsage = line.substring(64).trim(); 
+          const name = line.substring(0, 25).split('.')[0].trim() + '.exe';
+          const memoryUsage = line.substring(64).trim();
 
           const memoryInMB = parseInt(memoryUsage.replace(/[^\d]/g, ''), 10) / 1024 || 0;
 
@@ -152,6 +180,7 @@ function getRunningProcesses(): Promise<any[]> {
     });
   });
 }
+
 let processInterval;
 export async function runSteamGame(game: { appid: any; name: any }, socket: any) {
   clearInterval(processInterval);

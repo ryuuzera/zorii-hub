@@ -19,13 +19,13 @@ export function YTMusicPlaylist({ playerState, sendCommand }: YTMusicPlaylistPro
                   {index == 0 && <CommandSeparator />}
                   <CommandItem
                     key={song.videoId + index}
-                    className={`h-20 ${selected ? 'bg-accent text-accent-foreground' : ''} cursor-pointer`}>
+                    className={`h-18 ${selected ? 'bg-accent text-accent-foreground' : ''} cursor-pointer`}>
                     <div
                       className='flex flex-row w-full items-center'
                       onClick={() => {
                         sendCommand('playQueueIndex', index.toString());
                       }}>
-                      <img src={song.thumbnails[0].url} className='w-[65px] mr-3' />
+                      <img src={song.thumbnails[0].url} className='w-[42px] mr-3' />
                       <div className='flex flex-col ml-3 gap-2'>
                         <span className='font-bold text-[1.13rem]'>{song.title}</span>
                         <span className='text-[1rem]'>{song.author}</span>

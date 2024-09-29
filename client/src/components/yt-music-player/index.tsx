@@ -51,7 +51,6 @@ interface YTMusicPlayerProps {
   sendCommand: (command: string, data?: any) => Promise<void>;
 }
 export function YTMusicPlayer({ playerState, sendCommand }: YTMusicPlayerProps) {
-  console.log(JSON.stringify(playerState, null, 2));
   const [musicProgress, setProgress] = useState<number[]>([playerState?.player?.videoProgress ?? 0]);
   const glassEffect = 'bg-black rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-85 border';
 

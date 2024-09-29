@@ -2,4 +2,6 @@
 
 *start.js
 
-/server/prisma/zorii.db
+*.db
+
+/releases
