@@ -1,5 +1,5 @@
 
-# 🎮 Zorii Hub - Ultimate Remote Steam Game Launcher 🚀
+## 🎮 Zorii Hub - Ultimate Remote Steam Game Launcher 🚀
 
 Welcome to **Zorii Hub**, the next-level app to seamlessly launch and manage your Steam games! Whether you're a casual player or a hardcore gamer, Zorii Hub brings convenience and efficiency right to your desktop. Get ready to elevate your gaming experience with features that make remote game launching.
 <details>
