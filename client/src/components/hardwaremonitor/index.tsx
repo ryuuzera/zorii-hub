@@ -3,7 +3,7 @@ import { useSocket } from '@/hook/socket-connection';
 import { pageTransition } from '@/lib/transitions';
 import { HardwareInfo, HwData } from '@/types/response-schemas/hardwareinfo';
 import { convertBytes } from '@/utils/converter/byteconverter';
-import { Box, LinearProgress, Typography } from '@mui/material';
+import { Box, LinearProgress, Typography, useTheme } from '@mui/material';
 import { Gauge, gaugeClasses } from '@mui/x-charts';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -21,6 +21,7 @@ type RunningGameInfo = {
 };
 
 export default function HardwareMonitor({ data }: HardwareMonitorProps) {
+  const theme = useTheme();
   const [localData, setData] = useState<HardwareInfo | null>(data);
   const [runningGameInfo, setRunningGameInfo] = useState<RunningGameInfo | null>(null);
   const [debouncedFramerate, setDebouncedFramerate] = useState<number>(0);
@@ -119,26 +120,33 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
     });
 
   return (
-    <>
-      <motion.div {...pageTransition}>
-        <div className='w-full max-w-7xl flex flex-row flex-wrap items-center justify-evenly'>
-          <CpuInfo cpuInfo={cpuInfo} />
-          <div className='flex flex-col items-center min-h-[320px] mt-1'>
-            <Typography variant='h6' mb={1}>
+    <motion.div {...pageTransition}>
+      <div className="container mx-auto px-4 py-6">
+        {/* Main Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          {/* CPU Section */}
+          <div className="bg-gray-800 rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 lg:col-span-1">
+            <CpuInfo cpuInfo={cpuInfo} />
+          </div>
+
+          {/* GPU Section */}
+          <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
+            <Typography variant="h6" className="text-center mb-4 text-white">
               {localData?.gpu.gpuName}
             </Typography>
-            <div className='flex flex-row space-x-3'>
-              <div className='flex flex-col items-center'>
-                <Typography variant='body1'>Load</Typography>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col items-center">
+                <Typography variant="body1" className="text-gray-300 mb-2">GPU Load</Typography>
                 <Gauge
                   width={180}
-                  height={200}
+                  height={180}
                   value={parseFloat(gpuLoad ?? '')}
                   innerRadius={55}
-                  sx={(theme) => ({
-                    margin: 0,
+                  sx={{
                     [`& .${gaugeClasses.valueText}`]: {
-                      fontSize: '2rem',
+                      fontSize: '1.5rem',
+                      fill: theme.palette.text.primary,
                     },
                     [`& .${gaugeClasses.valueArc}`]: {
                       fill: '#1cbab7',
@@ -147,21 +155,21 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
                     [`& .${gaugeClasses.referenceArc}`]: {
                       fill: '#424750',
                     },
-                  })}
+                  }}
                   text={({ value }) => `${value}%`}
                 />
               </div>
-              <div className='flex flex-col items-center'>
-                <Typography variant='body1'>Temp</Typography>
+              <div className="flex flex-col items-center">
+                <Typography variant="body1" className="text-gray-300 mb-2">GPU Temp</Typography>
                 <Gauge
                   width={180}
-                  height={200}
+                  height={180}
                   value={parseFloat(gpuTemp ?? '')}
                   innerRadius={55}
-                  sx={(theme) => ({
+                  sx={{
                     [`& .${gaugeClasses.valueText}`]: {
-                      fontSize: '2rem',
-                      color: 'white',
+                      fontSize: '1.5rem',
+                      fill: theme.palette.text.primary,
                     },
                     [`& .${gaugeClasses.valueArc}`]: {
                       fill: '#1cbab7',
@@ -170,135 +178,250 @@ export default function HardwareMonitor({ data }: HardwareMonitorProps) {
                     [`& .${gaugeClasses.referenceArc}`]: {
                       fill: '#424750',
                     },
-                  })}
+                  }}
                   text={({ value }) => `${value} °C`}
                 />
               </div>
             </div>
-            <div className='flex flex-col items-start w-full'>
-              <Typography variant='body1' className='self-center'>
+            <div className="mt-4 bg-gray-700 rounded-lg p-3">
+              <Typography variant="body1" className="text-center text-gray-300 mb-2">
                 VRAM
               </Typography>
-              <div className='flex flex-row w-full justify-evenly'>
-                <div className='flex flex-col'>
-                  <Typography variant='body1'>Total:</Typography>
-                  <Typography variant='body1'>{gpuMem.total}</Typography>
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <Typography variant="caption" className="text-gray-400">Total</Typography>
+                  <Typography variant="body1">{gpuMem.total}</Typography>
                 </div>
-                <div className='flex flex-col'>
-                  <Typography variant='body1'>Used:</Typography>
-                  <Typography variant='body1'>{gpuMem.used}</Typography>
+                <div>
+                  <Typography variant="caption" className="text-gray-400">Used</Typography>
+                  <Typography variant="body1">{gpuMem.used}</Typography>
                 </div>
-                <div className='flex flex-col'>
-                  <Typography variant='body1'>Free:</Typography>
-                  <Typography variant='body1'>{gpuMem.free}</Typography>
+                <div>
+                  <Typography variant="caption" className="text-gray-400">Free</Typography>
+                  <Typography variant="body1">{gpuMem.free}</Typography>
                 </div>
               </div>
             </div>
           </div>
-          <div className='flex flex-col items-center justify-evenly min-w-[380px] min-h-[320px] mt-1 gap-3'>
-            <Typography variant='h5'>RAM</Typography>
-            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <LinearProgress sx={{ height: 24 }} variant='determinate' value={memory.load.value} />
-            </Box>
-            <div className='grid grid-cols-2 w-full'>
-              <Typography variant='body1'>Usage {memory.load.value}%</Typography>
-              <Typography variant='body1'>Used RAM: {memory.used.value}</Typography>
-              <Typography variant='body1'>Available: {memory.free.value}</Typography>
-              <Typography variant='body1'>Total {convertBytes(memory.total ?? 0, 'B', 'GB').toFixed(1)} GB</Typography>
-            </div>
-          </div>
-          <div className='overflow-x-scroll items-center justify-evenly min-w-[380px] h-[310px] mt-1 gap-3'>
-            <div className='flex flex-col h-full w-full'>
-              <div className='flex flex-col w-full items-center mb-2'>
-                <Typography variant='h5'>CPU Cores ({cpuInfo?.loads?.length})</Typography>
-              </div>
 
-              {cpuInfo?.loads?.map((item, index) => {
-                return (
-                  <div className='flex flex-col gap-1 items-left text-left w-full '>
-                    <div className='flex flex-row justify-between'>
-                      <div className='flex flex-row space-x-3'>
-                        <Typography variant='body2'>Core #{index + 1}</Typography>
-                        <Typography variant='body2'>{item.value}</Typography>
+          {/* RAM Section */}
+          <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
+            <Typography variant="h5" className="text-center mb-4 text-white">
+              System Memory
+            </Typography>
+            <div className="flex flex-col gap-4">
+              <div>
+                <Typography variant="body1" className="text-gray-300 mb-1">
+                  Usage: {memory.load.value}%
+                </Typography>
+                <LinearProgress 
+                  variant="determinate" 
+                  value={memory.load.value} 
+                  sx={{
+                    height: 10,
+                    borderRadius: 5,
+                    backgroundColor: '#424750',
+                    '& .MuiLinearProgress-bar': {
+                      backgroundColor: '#1cbab7',
+                    }
+                  }}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-700 rounded-lg p-3">
+                  <Typography variant="caption" className="text-gray-400">Used</Typography>
+                  <Typography variant="body1">{memory.used.value} GB</Typography>
+                </div>
+                <div className="bg-gray-700 rounded-lg p-3">
+                  <Typography variant="caption" className="text-gray-400">Available</Typography>
+                  <Typography variant="body1">{memory.free.value} GB</Typography>
+                </div>
+                <div className="bg-gray-700 rounded-lg p-3 col-span-2">
+                  <Typography variant="caption" className="text-gray-400">Total</Typography>
+                  <Typography variant="body1">
+                    {convertBytes(memory.total ?? 0, 'B', 'GB').toFixed(1)} GB
+                  </Typography>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CPU Cores Section */}
+          <div className="bg-gray-800 rounded-xl p-6 shadow-lg overflow-hidden">
+            <div className="flex flex-col h-full">
+              <Typography variant="h5" className="text-center mb-4 text-white">
+                CPU Cores ({cpuInfo?.loads?.length})
+              </Typography>
+              <div className="overflow-y-auto pr-2" style={{ maxHeight: '400px' }}>
+                {cpuInfo?.loads?.map((item, index) => (
+                  <div key={index} className="mb-4">
+                    <div className="flex justify-between items-center mb-1">
+                      <div className="flex items-center gap-2">
+                        <Typography variant="body2" className="text-gray-300">
+                          Core #{index + 1}
+                        </Typography>
+                        <Typography variant="body2" className="text-white font-medium">
+                          {item.value}%
+                        </Typography>
                       </div>
-                      <div className='flex flex-row space-x-3 items-center'>
-                        <Typography variant='body2'>{cpuInfo?.clocks && cpuInfo?.clocks[index].value}</Typography>
-
-                        <div className='flex flex-row items-center  gap-1'>
+                      <div className="flex items-center gap-3">
+                        <Typography variant="body2" className="text-white">
+                          {cpuInfo?.clocks && cpuInfo?.clocks[index].value} MHz
+                        </Typography>
+                        <div className="flex items-center gap-1">
                           <FireIcon
-                            color={'#fff'}
+                            color={theme.palette.text.primary}
                             size={12}
                             fillPercentage={(cpuInfo?.temps && parseFloat(cpuInfo?.temps[index].value ?? '')) ?? 0}
                           />
-                          <Typography variant='body2'>{cpuInfo?.temps && cpuInfo?.temps[index].value}</Typography>
+                          <Typography variant="body2" className="text-white">
+                            {cpuInfo?.temps && cpuInfo?.temps[index].value}°C
+                          </Typography>
                         </div>
                       </div>
                     </div>
-                    <Box sx={{ width: '100%' }} mb={2}>
-                      <LinearProgress variant='determinate' value={parseFloat(item.value ?? '')} />
-                    </Box>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className='flex flex-col items-center justify-evenly min-w-[380px] min-h-[320px] mt-1 gap-3'>
-            <Typography variant='h5'>Storage</Typography>
-            {storage?.map((item) => {
-              return (
-                <div className='w-full flex flex-col'>
-                  <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 1 }}>
                     <LinearProgress
-                      sx={{ height: 18 }}
-                      variant='determinate'
-                      value={parseFloat(String(item.usedSpace.value).replace('%', ''))}
+                      variant="determinate"
+                      value={parseFloat(item.value ?? '')}
+                      sx={{
+                        height: 8,
+                        borderRadius: 4,
+                        backgroundColor: '#424750',
+                        '& .MuiLinearProgress-bar': {
+                          backgroundColor: '#1cbab7',
+                        }
+                      }}
                     />
-                    <div className='flex flex-row w-full justify-between'>
-                      <Typography variant='body1'>{item.name}</Typography>
-                      <Typography variant='body1'>{item.usedSpace.value}</Typography>
-                    </div>
-                  </Box>
-                </div>
-              );
-            })}
-          </div>
-          {runningGameInfo?.framerate && runningGameInfo?.framerate > 0 ? (
-            <div className='w-[400px] h-[280px] border-[1px] rounded-md flex flex-col items-center gap-4 p-5'>
-              <Typography variant='h5'>Running Game</Typography>
-              <Typography variant='h6'>{runningGameInfo?.gameTitle ?? 'Teste Nome de Jogo'}</Typography>
-              <div className='flex flex-row gap-3'>
-                <Typography variant='h1' className='transition-all delay-200'>
-                  {Math.trunc(debouncedFramerate ?? 0)}
-                </Typography>
-                <Typography variant='body1' className='self-end mb-5'>
-                  fps
-                </Typography>
+                  </div>
+                ))}
               </div>
             </div>
-          ) : (
-            <MonitorCard
-              title={
-                <div className='flex flex-col w-full gap-2 text-start'>
-                  <img src='/display.png' className='self-end' alt='display' width={40} />
-                  <p>{localData?.pcName}</p>
+          </div>
+
+          {/* Storage Section */}
+          <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
+            <Typography variant="h5" className="text-center mb-4 text-white">
+              Storage
+            </Typography>
+            <div className="space-y-4">
+              {storage?.map((item, index) => (
+                <div key={index} className="bg-gray-700 rounded-lg p-4">
+                  <Typography variant="body1" className="text-white mb-2">
+                    {item.name}
+                  </Typography>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Typography variant="caption" className="text-gray-400">Usage:</Typography>
+                    <Typography variant="body2" className="text-white">
+                      {item.usedSpace.value}
+                    </Typography>
+                  </div>
+                  <LinearProgress
+                    variant="determinate"
+                    value={parseFloat(String(item.usedSpace.value).replace('%', ''))}
+                    sx={{
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: '#424750',
+                      '& .MuiLinearProgress-bar': {
+                        backgroundColor: '#1cbab7',
+                      }
+                    }}
+                  />
+                  {item.temperatures?.value && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Typography variant="caption" className="text-gray-400">Temp:</Typography>
+                      <Typography variant="body2" className="text-white">
+                        {item.temperatures.value}°C
+                      </Typography>
+                    </div>
+                  )}
+                  {item.remainingLife && (
+                    <div className="flex items-center gap-2 mt-1">
+                      <Typography variant="caption" className="text-gray-400">Health:</Typography>
+                      <Typography variant="body2" className="text-white">
+                        {item.remainingLife}%
+                      </Typography>
+                    </div>
+                  )}
                 </div>
-              }
-              description={localData?.username}
-              className='w-[400px] h-[280px] flex flex-col justify-start border-none'
-              contentClass='pl-3 pt-0 pb-2 '
-              headerClass='pt-3 pl-3 pb-1 mb-2'
-              cardContent={
-                <div className='flex flex-col gap-2'>
-                  <p>CPU: {localData?.cpu.cpuName}</p>
-                  <p>GPU: {localData?.gpu.gpuName}</p>
-                  <p>Memory: {`${convertBytes(localData?.memory.memoryTotal ?? 0, 'B', 'GB').toFixed(2)} GB`}</p>
-                  <p>OS: {localData?.system}</p>
+              ))}
+            </div>
+          </div>
+
+          {/* Game Info/System Info Section */}
+          <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
+            {runningGameInfo?.framerate && runningGameInfo?.framerate > 0 ? (
+              <div className="flex flex-col items-center h-full justify-center">
+                <Typography variant="h5" className="text-white mb-2">
+                  Running Game
+                </Typography>
+                <Typography variant="h6" className="text-gray-300 mb-6">
+                  {runningGameInfo?.gameTitle}
+                </Typography>
+                <div className="flex items-end gap-2">
+                  <Typography 
+                    variant="h1" 
+                    className="text-white transition-all delay-200"
+                    style={{ fontSize: '4rem', lineHeight: 1 }}
+                  >
+                    {Math.trunc(debouncedFramerate ?? 0)}
+                  </Typography>
+                  <Typography variant="body1" className="text-gray-400 mb-4">
+                    fps
+                  </Typography>
                 </div>
-              }
-            />
-          )}
+              </div>
+            ) : (
+              <MonitorCard
+                title={
+                  <div className="flex justify-between items-center w-full">
+                    <Typography variant="h5" className="text-white">
+                      {localData?.pcName}
+                    </Typography>
+                    <img src="/display.png" alt="display" width={40} height={40} />
+                  </div>
+                }
+                description={
+                  <Typography variant="body2" className="text-gray-400">
+                    {localData?.username}
+                  </Typography>
+                }
+                className="h-full flex flex-col border-none bg-transparent"
+                contentClass="pt-4"
+                headerClass="pb-3 border-b border-gray-700"
+                cardContent={
+                  <div className="space-y-3 mt-4">
+                    <div className="flex justify-between">
+                      <Typography variant="body2" className="text-gray-400">CPU:</Typography>
+                      <Typography variant="body2" className="text-white">
+                        {localData?.cpu.cpuName}
+                      </Typography>
+                    </div>
+                    <div className="flex justify-between">
+                      <Typography variant="body2" className="text-gray-400">GPU:</Typography>
+                      <Typography variant="body2" className="text-white">
+                        {localData?.gpu.gpuName}
+                      </Typography>
+                    </div>
+                    <div className="flex justify-between">
+                      <Typography variant="body2" className="text-gray-400">Memory:</Typography>
+                      <Typography variant="body2" className="text-white">
+                        {`${convertBytes(localData?.memory.memoryTotal ?? 0, 'B', 'GB').toFixed(2)} GB`}
+                      </Typography>
+                    </div>
+                    <div className="flex justify-between">
+                      <Typography variant="body2" className="text-gray-400">OS:</Typography>
+                      <Typography variant="body2" className="text-white">
+                        {localData?.system}
+                      </Typography>
+                    </div>
+                  </div>
+                }
+              />
+            )}
+          </div>
         </div>
-      </motion.div>
-    </>
+      </div>
+    </motion.div>
   );
 }

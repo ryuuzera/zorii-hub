@@ -68,22 +68,30 @@ export function ControlCenter({ playerStateData }: ControlCenterProps) {
     { icon: 'notepad.png', command: 'notepad' },
     { icon: 'calculator.png', command: 'calc' },
   ];
+
   return (
-    <>
-      <motion.div {...pageTransition}>
-        <div className='relative flex flex-col gap-3 h-[calc(100vh-55px)] w-screen max-w-7xl p-2 mt-2'>
-          {playerState?.player && (
-            <div className='flex flex-row gap-4 w-full'>
+    <motion.div {...pageTransition} className="min-h-screen">
+      <div className="container mx-auto px-4 py-4">
+        {/* Music Player Section */}
+        {playerState?.player && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <div className="lg:col-span-2">
               <YTMusicPlayer sendCommand={sendCommand} playerState={playerState} />
-              <div className='flex flex-1 border h-[300px] rounded-md flex-col overflow-auto'>
-                <YTMusicPlaylist sendCommand={sendCommand} playerState={playerState} />
-              </div>
             </div>
-          )}
+            <div className="lg:col-span-1">
+              <YTMusicPlaylist sendCommand={sendCommand} playerState={playerState} />
+            </div>
+          </div>
+        )}
+
+        {/* System Controls Section */}
+        <div className="mb-6">
           <SystemControls />
         </div>
+
+        {/* Shortcuts */}
         <Shortcuts shortcuts={shortcuts} />
-      </motion.div>
-    </>
+      </div>
+    </motion.div>
   );
 }

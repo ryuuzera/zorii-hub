@@ -30,6 +30,7 @@
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-keep-awake": "^0.2.0",
     "react-screen-wake-lock": "^3.0.2",
     "socket.io-client": "^4.7.5",
     "tailwind-merge": "^2.3.0",

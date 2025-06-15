@@ -15,19 +15,27 @@ export class SteamController {
 
     if (!appId) return res.status(401).send();
     const steamPath = path.join(process.env['ProgramFiles(x86)'] as string, 'Steam');
+
     const imagesFolder = path.join(steamPath, 'appcache', 'librarycache');
 
-    const imageName = `${appId}_library_600x900.jpg`;
+    const imageName = `library_600x900.jpg`;
 
-    const imageUrl = `${req.protocol}://${req.get('host')}/images/${imageName}`;
+    const imageUrl = `${req.protocol}://${req.get('host')}/images/${appId}/${imageName}`;
+
+    console.log(imageUrl);
 
     return res.send(imageUrl);
   }
 
   async listRecent(req, res: Response): Promise<Response> {
     try {
+      const gamesList = listInstalledGames(); 
+      
       const recentList = await new RecentGameRepository().list();
-      return res.status(200).json(recentList);
+
+      const filteredRecentList = recentList.filter((recent) => gamesList.some((game) => game.appid === recent.appId));
+
+      return res.status(200).json(filteredRecentList);
     } catch (error: any) {
       return res.status(403).send(error.message);
     }

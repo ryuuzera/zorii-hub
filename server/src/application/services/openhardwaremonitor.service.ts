@@ -3,7 +3,7 @@ import os from 'os';
 async function fetchHardwareInfo() {
   try {
     const request = await fetch(`http://${process.env.HOST}:8085/data.json`);
-    const requestJson = await (await request.json()).Children;
+    const requestJson = await (await request.json())?.Children;
     return requestJson.find(() => true);
   } catch (error: any) {
     console.log(error.message);
@@ -24,22 +24,22 @@ export async function getCompleteHardwareInfo() {
 
     // Motherboard
     const motherBoard = pc?.Children?.find((x) => x.ImageURL?.includes('mainboard'));
-    const motherBoardName = motherBoard.Text;
+    const motherBoardName = motherBoard?.Text;
 
     // MCU
     const mcu = motherBoard.Children?.find((x) => x.ImageURL?.includes('chip'));
-    const mcuName = mcu.Text;
+    const mcuName = mcu?.Text;
 
-    const mcuVoltages = mcu.Children?.find((x) => x.Text.includes('Voltages')).Children;
+    const mcuVoltages = mcu?.Children?.find((x) => x?.Text.includes('Voltages'))?.Children;
 
-    const mcuTemps = mcu.Children?.find((x) => x.Text.includes('Temperatures')).Children;
+    const mcuTemps = mcu?.Children?.find((x) => x?.Text.includes('Temperatures'))?.Children;
 
-    const mcuFans = mcu.Children?.find((x) => x.Text.includes('Fans')).Children;
+    const mcuFans = mcu?.Children?.find((x) => x?.Text.includes('Fans'))?.Children;
 
-    const mcuControls = mcu.Children?.find((x) => x.Text.includes('Controls')).Children;
+    const mcuControls = mcu?.Children?.find((x) => x?.Text.includes('Controls'))?.Children;
 
     // Cpu
-    const cpu = pc.Children?.find((x) => x.ImageURL?.includes('cpu'));
+    const cpu = pc?.Children?.find((x) => x.ImageURL?.includes('cpu'));
     const cpuClock = {
       min: cpu.Min,
       max: cpu.Max,
@@ -47,39 +47,39 @@ export async function getCompleteHardwareInfo() {
     };
 
     const cpuName = os.cpus()[0]?.model || 'Unknown CPU';
-    const cpuClocks = cpu.Children?.find((x) => x.Text.includes('Clock')).Children;
-    const cpuTemps = cpu.Children?.find((x) => x.Text.includes('Temperature')).Children;
-    const cpuLoad = cpu.Children?.find((x) => x.Text.includes('Load')).Children;
-    const cpuPowers = cpu.Children?.find((x) => x.Text.includes('Powers')).Children;
+    const cpuClocks = cpu.Children?.find((x) => x?.Text.includes('Clock')).Children;
+    const cpuTemps = cpu.Children?.find((x) => x?.Text.includes('Temperature')).Children;
+    const cpuLoad = cpu.Children?.find((x) => x?.Text.includes('Load')).Children;
+    const cpuPowers = cpu.Children?.find((x) => x?.Text.includes('Powers'))?.Children;
 
     // GPU
-    const gpu = pc.Children?.find((x) => x.ImageURL?.includes('nvidia'));
-    const gpuName = gpu.Text.replace('NVIDIA', '');
-    const gpuClocks = gpu.Children?.find((x) => x.Text.includes('Clocks')).Children;
-    const gpuTemps = gpu.Children?.find((x) => x.Text.includes('Temperatures')).Children;
-    const gpuLoad = gpu.Children?.find((x) => x.Text.includes('Load')).Children;
-    const gpuFans = gpu.Children?.find((x) => x.Text.includes('Fans')).Children;
-    const gpuControls = gpu.Children?.find((x) => x.Text.includes('Controls')).Children;
-    const gpuPowers = gpu.Children?.find((x) => x.Text.includes('Powers')).Children;
-    const gpuData = gpu.Children?.find((x) => x.Text.includes('Data')).Children;
-    const gpuThroughput = gpu.Children?.find((x) => x.Text.includes('Throughput')).Children;
+    const gpu = pc.Children?.find((x) => x?.ImageURL?.includes('nvidia'));
+    const gpuName = gpu?.Text.replace('NVIDIA', '');
+    const gpuClocks = gpu.Children?.find((x) => x?.Text.includes('Clocks')).Children;
+    const gpuTemps = gpu.Children?.find((x) => x?.Text.includes('Temperatures')).Children;
+    const gpuLoad = gpu.Children?.find((x) => x?.Text.includes('Load')).Children;
+    const gpuFans = gpu.Children?.find((x) => x?.Text.includes('Fans')).Children;
+    const gpuControls = gpu.Children?.find((x) => x?.Text.includes('Controls')).Children;
+    const gpuPowers = gpu.Children?.find((x) => x?.Text.includes('Powers')).Children;
+    const gpuData = gpu.Children?.find((x) => x?.Text.includes('Data')).Children;
+    const gpuThroughput = gpu.Children?.find((x) => x?.Text.includes('Throughput')).Children;
 
     // Memory
-    const memory = pc.Children?.find((x) => x.ImageURL?.includes('ram'));
+    const memory = pc.Children?.find((x) => x?.ImageURL?.includes('ram'));
     const memoryName = memory.Text;
     const memoryTotal = os.totalmem();
-    const memoryLoad = memory.Children?.find((x) => x.Text.includes('Load')).Children;
-    const memoryData = memory.Children?.find((x) => x.Text.includes('Data')).Children;
+    const memoryLoad = memory.Children?.find((x) => x?.Text.includes('Load')).Children;
+    const memoryData = memory.Children?.find((x) => x?.Text.includes('Data')).Children;
 
     // Storage (HDD/SSD)
-    const storage = pc.Children?.filter((x) => x.ImageURL?.includes('hdd') || x.ImageURL?.includes('ssd'));
+    const storage = pc.Children?.filter((x) => x?.ImageURL?.includes('hdd') || x?.ImageURL?.includes('ssd'));
     const storageData = storage.map((drive) => ({
       name: drive.Text,
-      temperatures: drive.Children?.find((x) => x.Text.includes('Temperatures'))?.Children,
-      load: drive.Children?.find((x) => x.Text.includes('Load')).Children,
-      levels: drive.Children?.find((x) => x.Text.includes('Levels'))?.Children,
-      factors: drive.Children?.find((x) => x.Text.includes('Factors'))?.Children,
-      data: drive.Children?.find((x) => x.Text.includes('Data'))?.Children,
+      temperatures: drive.Children?.find((x) => x?.Text.includes('Temperatures'))?.Children,
+      load: drive.Children?.find((x) => x?.Text.includes('Load')).Children,
+      levels: drive.Children?.find((x) => x?.Text.includes('Levels'))?.Children,
+      factors: drive.Children?.find((x) => x?.Text.includes('Factors'))?.Children,
+      data: drive.Children?.find((x) => x?.Text.includes('Data'))?.Children,
     }));
     const system = os.version();
     const result = {
@@ -129,6 +129,7 @@ export async function getCompleteHardwareInfo() {
     return result;
   } catch (error: any) {
     console.log(error.message);
+    console.log(error);
     return;
   }
 }

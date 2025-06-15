@@ -192,7 +192,7 @@ export async function runSteamGame(game: { appid: any; name: any }, socket: any)
     });
 
     const result = recentGame.list();
-    const command = `start steam://run/${game.appid}`;
+    const command = `start steam://rungameid/${game.appid}`;
 
     const initialProcesses = await getRunningProcesses();
 

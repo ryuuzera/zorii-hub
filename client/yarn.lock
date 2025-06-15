@@ -1844,6 +1844,13 @@ react-is@^18.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
+react-keep-awake@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-keep-awake/-/react-keep-awake-0.2.0.tgz#03d2f26532ec566a79a9b77fb9f7bf68f45bcfe2"
+  integrity sha512-IMU/SJPw1MRqsfe+SS+xEAcTuvQIEThmEGj5r2l2WygoDvvp5+UotH7oxz3W4gM3EUCprgoF/+lzHA9vM7OQwQ==
+  dependencies:
+    react-screen-wake-lock "^3.0.2"
+
 react-remove-scroll-bar@^2.3.3, react-remove-scroll-bar@^2.3.4:
   version "2.3.6"
   resolved "https://registry.yarnpkg.com/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.6.tgz#3e585e9d163be84a010180b18721e851ac81a29c"

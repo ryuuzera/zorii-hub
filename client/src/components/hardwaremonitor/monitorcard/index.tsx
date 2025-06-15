@@ -1,3 +1,4 @@
+'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function MonitorCard({ title, description, cardContent, className, contentClass, headerClass }: any) {

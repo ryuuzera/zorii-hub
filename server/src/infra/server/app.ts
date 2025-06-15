@@ -16,7 +16,10 @@ app.use(cors({ origin: '*' }));
 app.use(express.static('public'));
 
 const steamPath = getSteamPath();
+
 const imagesFolder = path.join(steamPath, 'appcache', 'librarycache');
+
+console.log(imagesFolder);
 
 app.use('/images', express.static(imagesFolder));
 
